@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="zh-CN">
-<head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>通用中文 HTML PPT 模板｜首页目录主题页</title><style>
+<head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>通用中文 HTML PPT 模板｜精简修复版式组件示例库</title><style>
 :root{--w:1280px;--h:720px;--ink:#202940;--umber:#4B4038;--taupe:#9A8678;--sand:#CAAA98;--paper:#fbf7f2;--panel:#f2e8df;--line:rgba(32,41,64,.72);--text:#202940;}
 *{box-sizing:border-box} body{margin:0;background:linear-gradient(135deg,var(--ink),#2b3146 58%,var(--umber));color:var(--text);font-family:"Source Han Serif SC","Noto Serif CJK SC","Songti SC","Noto Sans SC","Microsoft YaHei",serif;} 
 .slide{width:min(1280px,96vw);aspect-ratio:16/9;margin:28px auto;background:linear-gradient(180deg,var(--paper),#fffdf9);border:1.5px solid rgba(202,170,152,.95);position:relative;padding:50px 56px 44px;box-shadow:0 20px 48px rgba(0,0,0,.34),0 0 0 5px rgba(202,170,152,.16);overflow:hidden;}
@@ -303,22 +303,532 @@ body:fullscreen .slide,body:-webkit-full-screen .slide{max-width:none!important;
 
 
 
+
+
+/* === Extended component library v2 === */
+.note-ribbon{position:absolute;right:56px;top:62px;border:1px solid var(--taupe);background:rgba(202,170,152,.24);padding:8px 13px;font-size:15px;color:var(--umber);font-weight:700}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap-md);margin:10px 0 18px}.kpi{border:1.5px solid var(--line);background:linear-gradient(180deg,#fffaf6,var(--panel));padding:20px 16px;min-height:132px;box-shadow:inset 0 5px 0 rgba(202,170,152,.45)}.kpi b{display:block;font-size:40px;color:var(--ink);line-height:1;margin-bottom:10px}.kpi span{display:block;font-size:19px;color:var(--umber);line-height:1.28}.kpi small{font-size:14px;color:var(--taupe)}
+.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin:26px 0 18px;position:relative}.timeline::before{content:"";position:absolute;left:7%;right:7%;top:42px;height:3px;background:var(--ink);opacity:.8}.time-node{position:relative;text-align:center;padding-top:78px}.time-node::before{content:"";position:absolute;top:28px;left:50%;transform:translateX(-50%);width:30px;height:30px;border-radius:50%;background:var(--paper);border:4px solid var(--ink);z-index:2}.time-card{border:1.5px solid var(--line);background:var(--panel);padding:15px 10px;min-height:130px;font-size:18px;line-height:1.32}.time-card b{display:block;font-size:21px;color:var(--ink);margin-bottom:6px}.time-card small{font-size:14px;color:var(--taupe)}
+.matrix{display:grid;grid-template-columns:110px repeat(3,1fr);grid-template-rows:52px repeat(3,1fr);gap:7px;height:388px;margin-top:10px}.matrix div{border:1.2px solid rgba(75,64,56,.42);background:rgba(242,232,223,.78);padding:12px;font-size:17px;line-height:1.28}.matrix .mh,.matrix .mv{background:var(--ink);color:#fffaf6;font-weight:800;text-align:center;display:flex;align-items:center;justify-content:center}.matrix .hot{box-shadow:inset 0 0 0 3px rgba(202,170,152,.95);background:#fffaf6}.matrix small{display:block;color:var(--taupe);font-size:13px;margin-top:4px}
+.pesc{display:grid;grid-template-columns:1fr .95fr 1fr;gap:var(--gap-md);align-items:stretch}.pesc .panel{border:1.5px solid var(--line);background:var(--panel);padding:22px;min-height:300px}.pesc .panel h3{font-size:25px;margin:0 0 14px;color:var(--ink)}.pesc .panel p{font-size:20px;line-height:1.38;margin:0}.pesc .center{background:var(--ink);color:#fffaf6;text-align:center;display:flex;flex-direction:column;justify-content:center}.pesc .center h3{color:#fffaf6}.pesc .center b{font-size:42px;display:block;margin:14px 0;color:#fffaf6}
+.case-card{display:grid;grid-template-columns:.9fr 1.1fr;gap:var(--gap-lg)}.patient{border:1.5px solid var(--ink);background:linear-gradient(180deg,#fffaf6,var(--panel));padding:26px;min-height:390px}.patient .avatar{width:92px;height:92px;border-radius:50%;border:2px solid var(--taupe);display:flex;align-items:center;justify-content:center;font-size:42px;margin-bottom:18px;background:#fffdf9}.patient h3{font-size:27px;margin:0 0 13px}.patient p{font-size:20px;line-height:1.42;margin:0}.case-list{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-md)}.case-list .module{min-height:188px}
+.swot{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:var(--gap-md);height:390px}.swot>div{border:1.5px solid var(--line);background:var(--panel);padding:22px;font-size:19px;line-height:1.36}.swot h3{font-size:28px;margin:0 0 12px;color:var(--ink)}
+.qa{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-md);margin-top:10px}.qa-card{border:1.5px solid var(--line);background:linear-gradient(180deg,#fffaf6,var(--panel));padding:18px;min-height:180px}.qa-card b{display:block;font-size:22px;color:var(--ink);margin-bottom:8px}.qa-card p{font-size:18px;line-height:1.36;margin:0}.qa-card .q{color:var(--umber)}
+.ref-list{counter-reset:ref;margin:8px 0 0;padding:0;display:grid;gap:10px}.ref-list li{list-style:none;counter-increment:ref;border-left:5px solid var(--ink);background:var(--panel);padding:13px 16px 13px 58px;position:relative;font-size:17px;line-height:1.35}.ref-list li::before{content:"[" counter(ref) "]";position:absolute;left:14px;top:13px;font-weight:800;color:var(--umber)}
+.poster-grid{display:grid;grid-template-columns:1.05fr .95fr;grid-template-rows:auto 1fr;gap:var(--gap-md)}.poster-hero{grid-column:1/3;border:1.5px solid var(--ink);background:var(--ink);color:#fffaf6;padding:22px 26px;font-size:28px;font-weight:800}.poster-box{border:1.5px solid var(--line);background:var(--panel);padding:20px;min-height:290px}.poster-box h3{font-size:24px;margin:0 0 12px}.poster-box p{font-size:19px;line-height:1.38;margin:0}
+.annotation-demo{position:relative;border:2px dashed var(--taupe);background:#fffdf9;height:405px;margin-top:6px}.callout{position:absolute;border:1.5px solid var(--ink);background:var(--panel);padding:10px 13px;font-size:17px;line-height:1.25;box-shadow:0 8px 18px rgba(32,41,64,.09)}.callout::after{content:"";position:absolute;width:70px;border-top:2px solid var(--ink)}.callout.c1{left:45px;top:34px}.callout.c1::after{left:100%;top:50%;transform:rotate(20deg)}.callout.c2{right:42px;top:105px}.callout.c2::after{right:100%;top:50%;transform:rotate(-18deg)}.callout.c3{left:90px;bottom:44px}.callout.c3::after{left:100%;top:30%;transform:rotate(-20deg)}.target-dot{position:absolute;left:50%;top:50%;width:120px;height:120px;border-radius:50%;border:4px solid var(--ink);transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:var(--ink)}
+.dashboard{display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:145px 240px;gap:var(--gap-md)}.dash-big{grid-column:1/3;border:1.5px solid var(--line);background:var(--panel);padding:22px;font-size:24px}.dash-big b{font-size:46px;color:var(--ink)}.dash-side,.dash-chart{border:1.5px solid var(--line);background:#fffdf9;padding:18px}.dash-side b{font-size:34px;color:var(--ink);display:block}.barset{display:flex;align-items:flex-end;height:145px;gap:14px;margin-top:14px}.barset span{display:block;flex:1;background:var(--sand);border:1px solid var(--taupe)}
+
+/* === Cleaned library adjustments: merged redundant pages, fixed bottom notes and overflow === */
+.slide .body{height:590px;padding-bottom:68px;overflow:visible;}
+.layout-note{position:absolute!important;left:56px!important;right:56px!important;bottom:28px!important;top:auto!important;margin:0!important;z-index:20;border:1px solid var(--taupe)!important;background:rgba(202,170,152,.24)!important;padding:8px 14px!important;font-size:16px!important;line-height:1.25!important;color:var(--umber)!important;box-shadow:none!important;text-align:left!important;}
+.layout-note b{color:var(--ink)}
+.grid.fourcards .card{min-height:250px;}
+.swot{height:352px;}
+.timeline{margin-top:12px;}
+.time-card{min-height:118px;font-size:17px;}
+.matrix{height:354px;}
+.pesc .panel{min-height:285px;}
+.case-card{max-height:410px;}
+.patient{min-height:360px}.case-list .module{min-height:168px;}
+.annotation-demo{height:360px;}
+.ref-list li{font-size:16px;padding-top:10px;padding-bottom:10px;}
 </style>
-</head>
+<style id="bottom-note-and-page-number-fix">
+/* === Bottom merged notes + page numbers === */
+.page-num{position:absolute;right:56px;top:17px;z-index:30;font-size:15px;font-weight:800;color:var(--umber);letter-spacing:.04em;background:rgba(255,253,249,.78);border:1px solid rgba(154,134,120,.45);padding:3px 10px;border-radius:999px;}
+.slide .body{height:590px;padding-bottom:54px;overflow:visible;}
+.layout-note{position:absolute!important;left:56px!important;right:56px!important;bottom:12px!important;top:auto!important;margin:0!important;z-index:20;border:1px solid var(--taupe)!important;background:rgba(202,170,152,.24)!important;padding:7px 14px!important;font-size:15.5px!important;line-height:1.22!important;color:var(--umber)!important;box-shadow:none!important;text-align:left!important;}
+.layout-note b{color:var(--ink)!important;}
+.slidebar{padding-right:96px;}
+.slide--cover .page-num,.slide--toc .page-num,.slide--divider .page-num{top:18px;}
+@media print{.page-num{position:absolute!important;}}
+</style>
+<style id="image-layout-library-css">
+/* === Image Layout Library: fixed containers, ratio presets, overflow protection === */
+.imglib-body{height:590px;display:flex;flex-direction:column;gap:12px;padding-bottom:48px;min-height:0;overflow:hidden;}
+.imglib-grid{display:grid;gap:14px;min-height:0;overflow:hidden;}
+.imglib-two{grid-template-columns:1fr 1fr}.imglib-three{grid-template-columns:repeat(3,1fr)}.imglib-four{grid-template-columns:repeat(4,1fr)}
+.imglib-2x2{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}.imglib-3x2{grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr}
+.imglib-left-big{grid-template-columns:1.35fr .9fr;grid-template-rows:1fr 1fr}.imglib-left-big>.main{grid-row:1/3}
+.imglib-top-big{grid-template-columns:1fr 1fr;grid-template-rows:1.15fr .85fr}.imglib-top-big>.main{grid-column:1/3}
+.imglib-main-strip{grid-template-rows:1fr 118px}.imglib-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;min-height:0;overflow:hidden}
+.imglib-card{border:1.5px solid var(--line);background:linear-gradient(180deg,#fffaf6,var(--panel));padding:12px;min-width:0;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:7px;box-shadow:0 8px 18px rgba(32,41,64,.06)}
+.imgbox{width:100%;height:100%;min-height:0;overflow:hidden;border:2px dashed var(--taupe);background:repeating-linear-gradient(135deg,rgba(202,170,152,.18) 0 10px,rgba(255,253,249,.92) 10px 22px);display:flex;align-items:center;justify-content:center;text-align:center;color:var(--umber);font-size:22px;line-height:1.25;font-weight:800;position:relative;}
+.imgbox img{width:100%;height:100%;display:block;max-width:100%;max-height:100%;object-fit:contain;}
+.imgbox.cover img{object-fit:cover}.imgbox.contain img{object-fit:contain}.imgbox.top img{object-position:center top}.imgbox.left img{object-position:left center}
+.imgbox::after{content:attr(data-label);position:absolute;left:8px;bottom:7px;right:8px;padding:4px 7px;background:rgba(255,253,249,.88);border:1px solid rgba(154,134,120,.45);font-size:13px;line-height:1.15;font-weight:700;color:var(--umber);}
+.ratio-16-9{aspect-ratio:16/9}.ratio-4-3{aspect-ratio:4/3}.ratio-1-1{aspect-ratio:1/1}.ratio-3-4{aspect-ratio:3/4}.ratio-9-16{aspect-ratio:9/16}.ratio-long{aspect-ratio:21/9}.ratio-free{height:100%;aspect-ratio:auto}
+.img-caption{font-size:16px;line-height:1.28;color:var(--umber);margin:0}.img-title{font-size:21px;font-weight:800;color:var(--ink);margin:0}.img-small{font-size:14px;line-height:1.22;color:var(--taupe);margin:0}.img-explain{border:1.5px solid var(--line);background:var(--panel);padding:14px;font-size:18px;line-height:1.35;min-height:0;overflow:hidden}.img-explain h3{margin:0 0 8px;font-size:23px;color:var(--ink)}.img-explain ul{margin:0;padding-left:20px}.img-explain li{margin:5px 0}
+.callout-dot{position:absolute;border:2px solid var(--ink);background:#fffdf9;padding:8px 11px;font-size:16px;line-height:1.22;font-weight:800;color:var(--ink);box-shadow:0 8px 18px rgba(32,41,64,.12)}
+.dot-a{left:8%;top:14%}.dot-b{right:10%;top:26%}.dot-c{left:40%;bottom:18%}.zoom-layout{display:grid;grid-template-columns:1.25fr .75fr;gap:14px;min-height:0;overflow:hidden}.zoom-stack{display:grid;grid-template-rows:1fr 1fr;gap:14px;min-height:0;overflow:hidden}.image-table-layout{display:grid;grid-template-columns:1.05fr .95fr;gap:14px;min-height:0;overflow:hidden}.image-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:center;min-height:0;overflow:hidden}.image-flow .arrow{font-size:26px;text-align:center;color:var(--umber);font-weight:900}.figure-parts{display:grid;grid-template-columns:1.3fr .7fr;gap:14px;min-height:0;overflow:hidden}.part-list{display:grid;grid-template-rows:repeat(4,1fr);gap:10px;min-height:0;overflow:hidden}.part-chip{border:1.5px solid var(--line);background:var(--panel);padding:10px;font-size:17px;line-height:1.26;overflow:hidden}.part-chip b{color:var(--ink)}
+</style>
+<style id="page-number-and-auto-image-refine">
+/* === Refined page number: align with top rule, no capsule === */
+.page-num{
+  position:absolute!important;
+  right:56px!important;
+  top:15px!important;
+  z-index:31!important;
+  height:22px!important;
+  line-height:22px!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  font-size:15px!important;
+  font-weight:700!important;
+  letter-spacing:.02em!important;
+  color:var(--umber)!important;
+  text-align:right!important;
+}
+.slidebar{padding-right:66px;}
+.slide--cover .page-num,.slide--toc .page-num,.slide--divider .page-num{top:15px!important;}
+
+/* === Auto image fitting system: keep components, not standalone pages === */
+.imgbox,.auto-imgbox{
+  position:relative;
+  width:100%;
+  height:100%;
+  min-width:0;
+  min-height:0;
+  overflow:hidden;
+  border:1.5px dashed var(--taupe);
+  background:rgba(255,253,249,.88);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:var(--umber);
+}
+.imgbox img,.auto-imgbox img{
+  display:block;
+  max-width:100%;
+  max-height:100%;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center center;
+}
+.imgbox.cover img,.auto-imgbox.cover img{object-fit:cover;}
+.imgbox.contain img,.auto-imgbox.contain img{object-fit:contain;}
+.imgbox[data-label]::after,.auto-imgbox[data-label]::after{
+  content:attr(data-label);
+  position:absolute;
+  left:0;right:0;bottom:0;
+  padding:4px 7px;
+  background:rgba(202,170,152,.18);
+  border-top:1px solid rgba(154,134,120,.35);
+  color:var(--umber);
+  font-size:12px;
+  line-height:1.2;
+  text-align:left;
+}
+/* Ratio presets can be used manually or assigned automatically by JS. */
+.ratio-21-9{aspect-ratio:21/9}.ratio-16-9{aspect-ratio:16/9}.ratio-4-3{aspect-ratio:4/3}.ratio-1-1{aspect-ratio:1/1}.ratio-3-4{aspect-ratio:3/4}.ratio-9-16{aspect-ratio:9/16}.ratio-free{aspect-ratio:auto}
+.imgbox.auto-wide,.auto-imgbox.auto-wide{aspect-ratio:21/9;}
+.imgbox.auto-landscape,.auto-imgbox.auto-landscape{aspect-ratio:16/9;}
+.imgbox.auto-standard,.auto-imgbox.auto-standard{aspect-ratio:4/3;}
+.imgbox.auto-square,.auto-imgbox.auto-square{aspect-ratio:1/1;}
+.imgbox.auto-portrait,.auto-imgbox.auto-portrait{aspect-ratio:3/4;}
+.imgbox.auto-tall,.auto-imgbox.auto-tall{aspect-ratio:9/16;}
+
+.image-auto-grid{
+  display:grid;
+  gap:var(--gap-md);
+  height:100%;
+  min-height:0;
+  overflow:hidden;
+}
+.image-auto-grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr));}
+.image-auto-grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr));}
+.image-auto-grid.cols-4{grid-template-columns:repeat(4,minmax(0,1fr));}
+.image-auto-grid.grid-2x2{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));}
+.image-auto-grid.grid-3x2{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));}
+.image-auto-card{min-width:0;min-height:0;overflow:hidden;border:1.5px solid var(--line);background:linear-gradient(180deg,#fffaf6,var(--panel));padding:10px;display:flex;flex-direction:column;gap:6px;}
+.image-auto-card .img-title{font-size:15px;font-weight:800;color:var(--ink);margin:0;line-height:1.2;}
+.image-auto-card .imgbox,.image-auto-card .auto-imgbox{flex:1;}
+</style><style id="uniform-layout-note-final">
+/* === Final uniform bottom layout note === */
+.slide{padding-bottom:58px!important;}
+.slide--cover,.slide--toc,.slide--divider{padding-bottom:58px!important;}
+.layout-note{
+  position:absolute!important;
+  left:56px!important;
+  right:56px!important;
+  bottom:12px!important;
+  top:auto!important;
+  height:auto!important;
+  min-height:32px!important;
+  max-height:44px!important;
+  overflow:hidden!important;
+  margin:0!important;
+  z-index:25!important;
+  display:block!important;
+  border:1px solid rgba(154,134,120,.72)!important;
+  background:rgba(202,170,152,.22)!important;
+  padding:7px 14px!important;
+  font-size:15.5px!important;
+  line-height:1.2!important;
+  color:var(--umber)!important;
+  text-align:left!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+  font-weight:400!important;
+}
+.layout-note b{color:var(--ink)!important;font-weight:800!important;}
+.page-num{
+  position:absolute!important;
+  right:56px!important;
+  top:15px!important;
+  z-index:31!important;
+  height:22px!important;
+  line-height:22px!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  font-size:15px!important;
+  font-weight:700!important;
+  letter-spacing:.02em!important;
+  color:var(--umber)!important;
+  text-align:right!important;
+}
+.slidebar{padding-right:72px!important;}
+</style></head>
 <body>
 <div class="thumb-panel" id="thumb-panel"></div>
 <div class="slide-area">
-<section class="slide slide--cover" data-title="封面页" data-section="首页 / 标题 / 汇报信息"><div class="cover"><div class="cover-text"><div class="eyebrow">课程 / 汇报 / 项目</div><h1>在这里输入主标题</h1><p class="subtitle">在这里输入副标题或英文标题</p><div class="team-info">汇报人：姓名<br/>单位：学院 / 班级 / 小组<br/>日期：YYYY.MM.DD</div></div><div class="cover-img"><div class="fig" style="height:360px;display:flex;align-items:center;justify-content:center;">封面图片 / Logo 占位</div></div></div></section><section class="slide slide--toc" data-title="目录页" data-section="目录 / 汇报结构"><div class="toc"><h1>目 录</h1><ol><li>章节标题占位</li><li>章节标题占位</li><li>章节标题占位</li><li>章节标题占位</li><li>章节标题占位</li></ol></div></section><section class="slide task-divider slide--divider" data-title="主题页" data-section="章节分隔 / PART 标题"><div class="task-cover"><div class="task-num">01</div><div class="eyebrow">PART 01</div><h1>章节标题</h1><p>用一句话说明本章节要解决的问题。</p></div></section>
+<section class="slide slide--cover" data-section="首页 / 标题 / 汇报信息" data-title="封面页"><div class="page-num">1/24</div><div class="cover"><div class="cover-text"><div class="eyebrow">课程 / 汇报 / 项目</div><h1>在这里输入主标题</h1><p class="subtitle">在这里输入副标题或英文标题</p><div class="team-info">汇报人：姓名<br/>单位：学院 / 班级 / 小组<br/>日期：YYYY.MM.DD</div></div><div class="cover-img"><div class="fig" style="height:360px;display:flex;align-items:center;justify-content:center;">封面图片 / Logo 占位</div></div></div><div class="layout-note"><b>版式注释：</b>适合 首页 / 标题 / 汇报信息 ｜ <b>使用建议：</b>适合放主标题、副标题、汇报人和课程信息。封面只保留必要信息，图片可作为氛围辅助。</div></section><section class="slide slide--toc" data-section="目录 / 汇报结构" data-title="目录页"><div class="page-num">2/24</div><div class="toc"><h1>目 录</h1><ol><li>章节标题占位</li><li>章节标题占位</li><li>章节标题占位</li><li>章节标题占位</li><li>章节标题占位</li></ol></div><div class="layout-note"><b>版式注释：</b>适合 目录 / 汇报结构 ｜ <b>使用建议：</b>适合展示汇报结构。目录建议 4–6 项，标题尽量短。</div></section><section class="slide task-divider slide--divider" data-section="章节分隔 / PART 标题" data-title="主题页"><div class="page-num">3/24</div><div class="task-cover"><div class="task-num">01</div><div class="eyebrow">PART 01</div><h1>章节标题</h1><p>用一句话说明本章节要解决的问题。</p></div><div class="layout-note"><b>版式注释：</b>适合 章节分隔 / PART 标题 ｜ <b>使用建议：</b>适合章节分隔和节奏转换。只放章节名和一句本章问题。</div></section>
+<section class="slide gap-normal layout-cols-55-45" data-section="适合：开场观点 / 关键结论 / 章节高潮" data-title="版式01｜核心观点/海报强调"><div class="page-num">4/24</div>
+<div class="slidebar"><span>LAYOUT 01</span><span>核心观点 + 解释要点</span></div>
+<div class="body">
+<h1>核心观点页：一句大判断 + 3–4 个支撑要点</h1>
+<div class="question">最适合放“本页想让观众记住的一句话”，例如研究问题、诊断结论、章节总论点。</div>
+<div class="grid two">
+<div>
+<div class="logicline">一句话主张 / Take-home Message</div>
+<ul class="bullets">
+<li>先给结论，降低听众理解成本</li>
+<li>每个要点只保留一个动作或判断</li>
+<li>适合汇报开头、章节过渡、总结页</li>
+</ul>
+</div>
+<div class="card">
+<h3>右侧可放：证据摘要</h3>
+<p>用 2–3 句话解释为什么这个观点成立；也可以替换成图片、病例摘要或研究假设。</p>
+</div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 开场观点 / 关键结论 / 章节高潮 ｜ <b>使用建议：</b>当信息不复杂但需要“先立住观点”时使用。主句要短，辅助信息不超过 3 条。</div></section>
+<section class="slide gap-normal layout-cols-45-55" data-section="适合：实验图 / 病理图 / 机制图解读" data-title="版式02｜图文解释"><div class="page-num">5/24</div>
+<div class="slidebar"><span>LAYOUT 02</span><span>图文解释</span></div>
+<div class="body">
+<h1>图文解释页：左侧讲图，右侧提炼读图结论</h1>
+<div class="grid two">
+<div>
+<div class="fig fig--xl" data-caption="可替换为实验结果图、病例影像、流程截图">
+<div class="figlabel">图片 / 图表占位</div>
+<div class="figdesc">建议尺寸：约 480 × 360<br/>保留图注，避免图片塞满导致无法读图</div>
+</div>
+</div>
+<div>
+<div class="hint"><b>读图顺序：</b>先看分组 → 再看趋势 → 最后说结论。</div>
+<ul class="bullets">
+<li><b>看对象：</b>图中比较了哪些组？</li>
+<li><b>看变化：</b>指标升高、降低，还是无差异？</li>
+<li><b>看意义：</b>这个变化支持了什么判断？</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 实验图 / 病理图 / 机制图解读 ｜ <b>使用建议：</b>适合 Figure 解读、影像学表现、病理形态、网页或软件截图说明。</div></section>
+<section class="slide gap-normal" data-section="适合：分类 / 四个原因 / 四项证据" data-title="版式03｜四卡片并列"><div class="page-num">6/24</div>
+<div class="slidebar"><span>LAYOUT 03</span><span>四卡片并列</span></div>
+<div class="body">
+<h1>四卡片并列页：把同一层级的信息横向展开</h1>
+<div class="tagline">最适合“并列关系”，例如四个临床表现、四类证据、四个研究步骤；不适合放因果链。</div>
+<div class="grid fourcards">
+<div class="card"><h3>① 背景</h3><p>说明问题从哪里来，为什么值得讨论。</p></div>
+<div class="card"><h3>② 现象</h3><p>列出观察到的关键表现或数据变化。</p></div>
+<div class="card"><h3>③ 机制</h3><p>解释背后可能的原因、通路或逻辑。</p></div>
+<div class="card"><h3>④ 意义</h3><p>落到诊断、治疗、启发或后续研究。</p></div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 分类 / 四个原因 / 四项证据 ｜ <b>使用建议：</b>卡片标题尽量同构，例如都用名词或都用动宾短语。</div></section>
+<section class="slide gap-normal" data-section="适合：实验流程 / 发病过程 / 操作步骤" data-title="版式04｜流程链路"><div class="page-num">7/24</div>
+<div class="slidebar"><span>LAYOUT 04</span><span>横向流程链路</span></div>
+<div class="body">
+<h1>流程页：用箭头表现“先后顺序”或“因果推进”</h1>
+<div class="question">适合有明确顺序的信息：实验设计、诊疗流程、历史发展、技术路线。</div>
+<div class="flow">
+<div class="flowbox">提出问题<br/><small>研究/病例起点</small></div><div class="arrow">→</div>
+<div class="flowbox">收集证据<br/><small>检查/实验/资料</small></div><div class="arrow">→</div>
+<div class="flowbox">分析机制<br/><small>解释原因</small></div><div class="arrow">→</div>
+<div class="flowbox">形成结论<br/><small>诊断/观点</small></div>
+</div>
+<div class="wideflow">
+<div>每一步只写一个核心动作<br/><small>避免在流程框里塞长句</small></div><span>→</span><div>把补充解释放到下方或讲稿中<br/><small>PPT 只承担提示作用</small></div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 实验流程 / 发病过程 / 操作步骤 ｜ <b>使用建议：</b>流程超过 5 步时，拆成两页或改成纵向流程。</div></section>
+<section class="slide gap-normal" data-section="适合：概念辨析 / 方案比较 / 鉴别诊断" data-title="版式05｜对比分析"><div class="page-num">8/24</div>
+<div class="slidebar"><span>LAYOUT 05</span><span>左右对比</span></div>
+<div class="body">
+<h1>对比页：左右两栏突出差异，中间用结论收束</h1>
+<div class="compare">
+<div><b>对象 A</b><span class="mut">特点 / 优势</span><small>适合写定义、表现、适用场景</small></div>
+<div><b>对象 B</b><span class="mut">区别 / 局限</span><small>适合写相反点、风险、限制</small></div>
+</div>
+<div class="minirow">
+<div><b>共同点</b><br/>两者都涉及同一个主题或指标</div>
+<div><b>关键差异</b><br/>差异最好控制在 2–3 条</div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 概念辨析 / 方案比较 / 鉴别诊断 ｜ <b>使用建议：</b>适合“概念容易混淆”的内容，如两种病原体、两类药物、两种技术路线。</div></section>
+<section class="slide gap-normal text-sm-slide" data-section="适合：多指标比较 / 文献整理 / 鉴别诊断" data-title="版式06｜表格归纳"><div class="page-num">9/24</div>
+<div class="slidebar"><span>LAYOUT 06</span><span>表格归纳</span></div>
+<div class="body">
+<h1>表格页：当比较维度较多时，用表格压缩信息</h1>
+<div class="warning">适合“多个对象 × 多个指标”的内容；如果只有两个对象，优先用左右对比页。</div>
+<table class="tbl">
+<thead><tr><th>比较维度</th><th>对象 A</th><th>对象 B</th><th>汇报时怎么讲</th></tr></thead>
+<tbody>
+<tr><td>定义 / 来源</td><td>一句话定义</td><td>一句话定义</td><td>先说明比较对象</td></tr>
+<tr><td>关键表现</td><td>2–3 个关键词</td><td>2–3 个关键词</td><td>只讲最能区分的点</td></tr>
+<tr><td>证据 / 检查</td><td>结果 A</td><td>结果 B</td><td>强调判断依据</td></tr>
+<tr><td>结论 / 处理</td><td>对应结论</td><td>对应结论</td><td>落到应用场景</td></tr>
+</tbody>
+</table>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 多指标比较 / 文献整理 / 鉴别诊断 ｜ <b>使用建议：</b>表格字数要克制，长解释放在演讲稿里。</div></section>
+<section class="slide gap-normal" data-section="适合：证据等级 / 结构层级 / 由浅入深" data-title="版式07｜金字塔层级"><div class="page-num">10/24</div>
+<div class="slidebar"><span>LAYOUT 07</span><span>层级结构</span></div>
+<div class="body">
+<h1>金字塔页：表达“层级、递进、基础到高级”</h1>
+<div class="pyramid">
+<div>最终结论</div>
+<div>核心机制 / 关键判断</div>
+<div>主要证据</div>
+<div>观察现象 / 数据结果</div>
+<div>背景问题 / 基础概念</div>
+</div>
+<div class="grid two">
+<div class="module"><h3>适合信息</h3><p>证据等级、理论框架、学习路径、诊疗优先级、研究逻辑层次。</p></div>
+<div class="module"><h3>不适合信息</h3><p>并列分类或时间顺序；这些更适合卡片页或流程页。</p></div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 证据等级 / 结构层级 / 由浅入深 ｜ <b>使用建议：</b>适合表达重要性、层级关系或由浅入深。每层只写关键词。</div></section>
+<section class="slide gap-normal" data-section="适合：分类框架 / 鉴别诊断 / 原因拆解" data-title="版式08｜树状分类"><div class="page-num">11/24</div>
+<div class="slidebar"><span>LAYOUT 08</span><span>树状分类</span></div>
+<div class="body">
+<h1>树状分类页：从一个核心问题拆出多个分支</h1>
+<div class="tree">
+<div class="root">核心问题 / 总类别</div>
+<div class="branches">
+<div><b>分支一</b><br/>原因、类别或表现</div>
+<div><b>分支二</b><br/>原因、类别或表现</div>
+<div><b>分支三</b><br/>原因、类别或表现</div>
+<div><b>分支四</b><br/>原因、类别或表现</div>
+</div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 分类框架 / 鉴别诊断 / 原因拆解 ｜ <b>使用建议：</b>适合从总到分拆解。分支数量建议 3–4 个，避免树太密。</div></section>
+<section class="slide gap-normal" data-section="适合：两条机制 / 两组证据 / 两种方案最终汇合" data-title="版式09｜双路径汇合"><div class="page-num">12/24</div>
+<div class="slidebar"><span>LAYOUT 09</span><span>双路径汇合</span></div>
+<div class="body">
+<h1>双路径汇合页：两条线索最后指向同一结论</h1>
+<div class="dualpath">
+<div><b>路径 A</b><small>例如：临床表现 / 现象观察</small></div>
+<div><b>路径 B</b><small>例如：实验检查 / 文献证据</small></div>
+<div><b>中间判断 A</b><small>支持某一方向</small></div>
+<div><b>中间判断 B</b><small>排除或强化判断</small></div>
+<div class="merge"><b>共同结论</b><small>两条证据链合并，形成最终判断</small></div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 两条机制 / 两组证据 / 两种方案最终汇合 ｜ <b>使用建议：</b>适合两条机制或两组证据最终指向同一结论。左右结构要保持对称。</div></section>
+<section class="slide gap-normal" data-section="适合：研究方案 / 技术路线 / 项目计划" data-title="版式10｜实验设计管线"><div class="page-num">13/24</div>
+<div class="slidebar"><span>LAYOUT 10</span><span>实验设计 / 技术路线</span></div>
+<div class="body">
+<h1>管线页：展示从样本到结论的完整设计</h1>
+<div class="pipeline five">
+<div><b>1. 对象</b><br/><small>样本 / 患者 / 材料</small></div>
+<div><b>2. 分组</b><br/><small>对照组 / 实验组</small></div>
+<div><b>3. 干预</b><br/><small>处理条件 / 操作</small></div>
+<div><b>4. 检测</b><br/><small>指标 / 方法</small></div>
+<div><b>5. 判断</b><br/><small>预期结果 / 结论</small></div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 研究方案 / 技术路线 / 项目计划 ｜ <b>使用建议：</b>适合实验设计、新课题设计、方法学说明。每个框建议“标题 + 关键词”。</div></section>
+<section class="slide gap-normal layout-cols-40-60" data-section="适合：模型图 / 地图 / 复杂示意图" data-title="版式11｜大图+局部说明"><div class="page-num">14/24</div>
+<div class="slidebar"><span>LAYOUT 11</span><span>大图 + 局部说明</span></div>
+<div class="body">
+<h1>大图页：让图成为主角，用小模块解释局部</h1>
+<div class="grid two">
+<div>
+<div class="fig fig--full" data-caption="主图占位：机制模型 / 路线地图 / 复杂流程图">
+<div class="figlabel">主图占位</div>
+<div class="figdesc">建议放一张完整示意图<br/>讲解时按编号逐步扫图</div>
+</div>
+</div>
+<div class="vflow">
+<div class="vflowbox"><b>① 先定位</b><br/>告诉观众图中各部分代表什么</div>
+<div class="varrow">↓</div>
+<div class="vflowbox"><b>② 再解释</b><br/>指出最重要的变化或关系</div>
+<div class="varrow">↓</div>
+<div class="vflowbox"><b>③ 最后收束</b><br/>回到本页结论</div>
+</div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 模型图 / 地图 / 复杂示意图 ｜ <b>使用建议：</b>适合图比文字更重要的页面。右侧必须给清晰讲解路径。</div></section>
+<section class="slide gap-normal" data-section="适合：章节小结 / 全篇结束 / 答辩复盘" data-title="版式12｜结论清单/最终收束"><div class="page-num">15/24</div>
+<div class="slidebar"><span>LAYOUT 12</span><span>结论清单</span></div>
+<div class="body">
+<h1>结论收束页：把全篇内容压缩成可记忆清单</h1>
+<div class="checklist">
+<div>✓ 这页解决了什么问题？</div>
+<div>✓ 最关键的证据是什么？</div>
+<div>✓ 结论能否直接说清？</div>
+<div>✓ 听众还会追问什么？</div>
+</div>
+<div class="finalmodel">
+<div>背景<br/><small>为什么重要</small></div><span>→</span>
+<div>证据<br/><small>凭什么判断</small></div><span>→</span>
+<div>机制<br/><small>怎么解释</small></div><span>→</span>
+<div>应用<br/><small>有什么意义</small></div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 章节小结 / 全篇结束 / 答辩复盘 ｜ <b>使用建议：</b>适合最后一页、章节小结、答辩前复盘。清单要短，最好 4 条以内。</div></section>
+<section class="slide gap-normal" data-section="适合：核心数据 / 结果摘要 / 进度总览" data-title="版式13｜数据指标卡/轻量Dashboard"><div class="page-num">16/24</div>
+<div class="slidebar"><span>LAYOUT 13</span><span>数据指标卡</span></div>
+<div class="body">
+<h1>数据指标卡：先给数字，再解释含义</h1>
+<div class="kpi-row">
+<div class="kpi"><b>80%</b><span>关键比例 / 命中率</span><small>适合放最抓眼的数据</small></div>
+<div class="kpi"><b>3.2×</b><span>变化倍数 / 提升幅度</span><small>适合强调前后变化</small></div>
+<div class="kpi"><b>12</b><span>样本数 / 文献数</span><small>适合说明证据规模</small></div>
+<div class="kpi"><b>4</b><span>核心结论数量</span><small>适合做章节预告</small></div>
+</div>
+<div class="grid two">
+<div class="module"><h3>适合信息</h3><p>实验结果、调研结果、病例统计、项目进度、结论摘要。</p></div>
+<div class="module"><h3>使用提醒</h3><p>数字必须有单位或解释；不要只放数字，否则听众不知道它为什么重要。</p></div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 核心数据 / 结果摘要 / 进度总览 ｜ <b>使用建议：</b>适合“数字本身就是论点”的页面，常放在结果页开头。</div></section>
+<section class="slide gap-normal" data-section="适合：历史演变 / 病程变化 / 项目计划" data-title="版式14｜时间线"><div class="page-num">17/24</div>
+<div class="slidebar"><span>LAYOUT 14</span><span>时间线</span></div>
+<div class="body">
+<h1>时间线页：按时间顺序讲清发展过程</h1>
+<div class="timeline">
+<div class="time-node"><div class="time-card"><b>阶段 1</b>背景出现<br/><small>时间 / 事件</small></div></div>
+<div class="time-node"><div class="time-card"><b>阶段 2</b>关键变化<br/><small>转折点</small></div></div>
+<div class="time-node"><div class="time-card"><b>阶段 3</b>证据积累<br/><small>检查 / 实验</small></div></div>
+<div class="time-node"><div class="time-card"><b>阶段 4</b>形成判断<br/><small>分析过程</small></div></div>
+<div class="time-node"><div class="time-card"><b>阶段 5</b>结果处理<br/><small>结论 / 应用</small></div></div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 历史演变 / 病程变化 / 项目计划 ｜ <b>使用建议：</b>适合病程、历史、研究进展、项目排期。每个节点只写“时间 + 事件 + 意义”。</div></section>
+<section class="slide gap-normal text-sm-slide" data-section="适合：分类比较 / 优先级判断 / 决策表" data-title="版式15｜三维矩阵"><div class="page-num">18/24</div>
+<div class="slidebar"><span>LAYOUT 15</span><span>矩阵分析</span></div>
+<div class="body">
+<h1>矩阵页：把复杂判断变成结构化表格</h1>
+<div class="matrix">
+<div></div><div class="mh">维度 A</div><div class="mh">维度 B</div><div class="mh">维度 C</div>
+<div class="mv">对象 1</div><div>信息点<small>一句话解释</small></div><div class="hot">重点格<small>可高亮核心结论</small></div><div>信息点</div>
+<div class="mv">对象 2</div><div>信息点</div><div>信息点</div><div>信息点</div>
+<div class="mv">对象 3</div><div>信息点</div><div>信息点</div><div class="hot">重点格</div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 分类比较 / 优先级判断 / 决策表 ｜ <b>使用建议：</b>适合“对象很多、维度也很多”的内容；比普通表格更适合突出重点格。</div></section>
+<section class="slide gap-normal" data-section="适合：论文汇报 / 病例讨论 / 论证页" data-title="版式16｜问题-证据-结论"><div class="page-num">19/24</div>
+<div class="slidebar"><span>LAYOUT 16</span><span>论证闭环</span></div>
+<div class="body">
+<h1>论证闭环页：用“问题—证据—结论”组织一页</h1>
+<div class="pesc">
+<div class="panel"><h3>问题</h3><p>本页要回答什么？把问题写成一句可判断的话。</p></div>
+<div class="panel center"><h3>证据</h3><b>Evidence</b><p>放 2–3 条最关键依据，不堆材料。</p></div>
+<div class="panel"><h3>结论</h3><p>所以我们可以判断：……。结论必须能回扣开头问题。</p></div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 论文汇报 / 病例讨论 / 论证页 ｜ <b>使用建议：</b>适合论文结果解释、病例诊断依据、观点论证。它比单纯项目符号更有说服力。</div></section>
+<section class="slide gap-normal" data-section="适合：病例汇报 / 用户画像 / 项目背景" data-title="版式17｜病例信息卡"><div class="page-num">20/24</div>
+<div class="slidebar"><span>LAYOUT 17</span><span>案例 / 病例卡</span></div>
+<div class="body">
+<h1>案例页：先给对象画像，再拆分关键信息</h1>
+<div class="case-card">
+<div class="patient"><div class="avatar">人</div><h3>对象基本信息</h3><p>年龄 / 性别 / 背景 / 主诉 / 主要矛盾。这里适合放“让听众快速进入情境”的信息。</p></div>
+<div class="case-list">
+<div class="module"><h3>① 关键表现</h3><p>症状、现象、用户痛点。</p></div>
+<div class="module"><h3>② 重要检查</h3><p>实验室、影像、问卷数据。</p></div>
+<div class="module"><h3>③ 初步判断</h3><p>可能方向与依据。</p></div>
+<div class="module"><h3>④ 下一步</h3><p>检查、干预或验证方案。</p></div>
+</div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 病例汇报 / 用户画像 / 项目背景 ｜ <b>使用建议：</b>适合病例汇报、访谈对象、用户画像、项目案例介绍。</div></section>
+<section class="slide gap-normal" data-section="适合：方案评估 / 项目分析 / 策略选择" data-title="版式18｜SWOT四象限"><div class="page-num">21/24</div>
+<div class="slidebar"><span>LAYOUT 18</span><span>四象限分析</span></div>
+<div class="body">
+<h1>四象限页：把方案优劣和外部因素分开讲</h1>
+<div class="swot">
+<div><h3>S 优势</h3>内部有利因素：已有基础、资源、独特价值。</div>
+<div><h3>W 劣势</h3>内部不利因素：限制、风险、短板。</div>
+<div><h3>O 机会</h3>外部有利因素：趋势、政策、需求、窗口期。</div>
+<div><h3>T 威胁</h3>外部不利因素：竞争、成本、不可控风险。</div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 方案评估 / 项目分析 / 策略选择 ｜ <b>使用建议：</b>适合商业分析、课题可行性分析、治疗或技术方案评估。</div></section>
+<section class="slide gap-normal" data-section="适合：答辩问题 / 老师追问 / 观众互动" data-title="版式19｜问答准备"><div class="page-num">22/24</div>
+<div class="slidebar"><span>LAYOUT 19</span><span>Q&amp;A 预案</span></div>
+<div class="body">
+<h1>问答页：提前准备高概率追问</h1>
+<div class="qa">
+<div class="qa-card"><b>Q1：概念追问</b><p class="q">这个概念和另一个概念有什么区别？</p><p>A：先定义，再说关键差异，最后回到本汇报场景。</p></div>
+<div class="qa-card"><b>Q2：证据追问</b><p class="q">你的判断依据是什么？</p><p>A：按“现象—数据—结论”三步回答。</p></div>
+<div class="qa-card"><b>Q3：局限追问</b><p class="q">这个方案有什么不足？</p><p>A：承认边界，再说明仍然有价值的部分。</p></div>
+<div class="qa-card"><b>Q4：应用追问</b><p class="q">这个结论能用在哪里？</p><p>A：给一个具体场景，不要泛泛而谈。</p></div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 答辩问题 / 老师追问 / 观众互动 ｜ <b>使用建议：</b>适合答辩备用页。正式汇报可隐藏，提问时跳转使用。</div></section>
+<section class="slide gap-normal text-sm-slide" data-section="适合：文献页 / 数据来源 / 图片来源" data-title="版式20｜参考文献"><div class="page-num">23/24</div>
+<div class="slidebar"><span>LAYOUT 20</span><span>参考文献 / 来源</span></div>
+<div class="body">
+<h1>参考文献页：把来源写得规范但不拥挤</h1>
+<ol class="ref-list">
+<li>作者. 文章标题. 期刊名, 年份, 卷号: 页码.</li>
+<li>机构或网站. 报告标题 / 数据来源. 发布年份或访问日期.</li>
+<li>图片来源：数据库、论文图号、教材或自绘说明。</li>
+<li>补充材料：指南、共识、课程资料或实验手册。</li>
+<li>如果文献超过 8 条，建议分成“核心文献”和“补充来源”。</li>
+</ol>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 文献页 / 数据来源 / 图片来源 ｜ <b>使用建议：</b>适合最后几页。参考文献页不要讲太久，但要保证格式统一。</div></section>
+<section class="slide gap-normal" data-section="适合：图片讲解 / 结构图 / 实验结果图" data-title="版式21｜标注讲图"><div class="page-num">24/24</div>
+<div class="slidebar"><span>LAYOUT 21</span><span>图片标注</span></div>
+<div class="body">
+<h1>标注讲图页：把讲解点直接贴到图上</h1>
+<div class="annotation-demo">
+<div class="target-dot">主图</div>
+<div class="callout c1"><b>标注 1</b><br/>指出图中位置</div>
+<div class="callout c2"><b>标注 2</b><br/>解释变化趋势</div>
+<div class="callout c3"><b>标注 3</b><br/>落到本页结论</div>
+</div>
+</div>
+<div class="layout-note"><b>版式注释：</b>适合 图片讲解 / 结构图 / 实验结果图 ｜ <b>使用建议：</b>适合论文图、显微图、影像图、地图。标注不要超过 3 个，否则图会乱。</div></section>
 </div>
 <div class="nav-controls">
 <button class="nav-btn" id="btn-prev">‹</button>
-<span id="slide-counter">1/3</span>
+<span id="slide-counter">1/24</span>
 <button class="nav-btn" id="btn-next">›</button>
 <button class="nav-btn" id="btn-fs">⛶</button>
 <button class="nav-btn export-btn" id="btn-export-pptx" title="将每页以高清截图写入 PPTX，保持 16:9 比例">导出PPTX</button>
 <span aria-live="polite" id="export-status"></span>
 </div>
-<div id="progress-bar" style="width:2.2222%"></div>
+<div id="progress-bar" style="width:4.1667%"></div>
 <script>
 (function(){
   var slides=document.querySelectorAll('.slide');
@@ -563,4 +1073,44 @@ body:fullscreen .slide,body:-webkit-full-screen .slide{max-width:none!important;
   fitDeck();
 })();
 </script>
-</body></html>
+<script id="auto-image-ratio-fitter">
+(function(){
+  function classifyBox(box){
+    var img=box.querySelector('img');
+    if(!img) return;
+    function apply(){
+      var w=img.naturalWidth || img.width;
+      var h=img.naturalHeight || img.height;
+      if(!w || !h) return;
+      var r=w/h;
+      box.classList.remove('auto-wide','auto-landscape','auto-standard','auto-square','auto-portrait','auto-tall');
+      if(r>=2.05) box.classList.add('auto-wide');
+      else if(r>=1.45) box.classList.add('auto-landscape');
+      else if(r>=1.12) box.classList.add('auto-standard');
+      else if(r>=0.88) box.classList.add('auto-square');
+      else if(r>=0.58) box.classList.add('auto-portrait');
+      else box.classList.add('auto-tall');
+      if(!box.classList.contains('cover')) box.classList.add('contain');
+      box.dataset.imgRatio = r.toFixed(2);
+    }
+    if(img.complete && img.naturalWidth) apply();
+    else img.addEventListener('load', apply, {once:true});
+  }
+  function fitAllImages(root){
+    Array.prototype.slice.call((root||document).querySelectorAll('.imgbox.auto, .auto-imgbox, [data-auto-fit="image"]')).forEach(classifyBox);
+  }
+  window.fitAllImages = fitAllImages;
+  document.addEventListener('DOMContentLoaded', function(){fitAllImages(document);});
+})();
+</script><template id="image-component-snippets">
+<!-- 图片组件片段：复制到任意内容页中使用，不会作为独立页面显示 -->
+<div class="auto-imgbox auto contain" data-auto-fit="image" data-label="自动识别图片比例，完整显示">
+<img alt="图片说明" src="your-image.png"/>
+</div>
+<div class="image-auto-grid grid-2x2">
+<div class="image-auto-card"><p class="img-title">A 标题</p><div class="auto-imgbox auto contain" data-auto-fit="image"><img alt="A" src="a.png"/></div></div>
+<div class="image-auto-card"><p class="img-title">B 标题</p><div class="auto-imgbox auto contain" data-auto-fit="image"><img alt="B" src="b.png"/></div></div>
+<div class="image-auto-card"><p class="img-title">C 标题</p><div class="auto-imgbox auto contain" data-auto-fit="image"><img alt="C" src="c.png"/></div></div>
+<div class="image-auto-card"><p class="img-title">D 标题</p><div class="auto-imgbox auto contain" data-auto-fit="image"><img alt="D" src="d.png"/></div></div>
+</div>
+</template></body></html>
