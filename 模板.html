@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>通用中文 HTML PPT 模板｜首页目录主题页</title><style>
+:root{--w:1280px;--h:720px;--ink:#202940;--umber:#4B4038;--taupe:#9A8678;--sand:#CAAA98;--paper:#fbf7f2;--panel:#f2e8df;--line:rgba(32,41,64,.72);--text:#202940;}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(135deg,var(--ink),#2b3146 58%,var(--umber));color:var(--text);font-family:"Source Han Serif SC","Noto Serif CJK SC","Songti SC","Noto Sans SC","Microsoft YaHei",serif;} 
+.slide{width:min(1280px,96vw);aspect-ratio:16/9;margin:28px auto;background:linear-gradient(180deg,var(--paper),#fffdf9);border:1.5px solid rgba(202,170,152,.95);position:relative;padding:50px 56px 44px;box-shadow:0 20px 48px rgba(0,0,0,.34),0 0 0 5px rgba(202,170,152,.16);overflow:hidden;}
+.slide::before{content:"";position:absolute;left:0;right:0;top:0;height:10px;background:linear-gradient(90deg,var(--ink),var(--umber),var(--sand));}
+.slide::after{content:"";position:absolute;right:28px;bottom:18px;width:150px;height:150px;border:1px solid rgba(154,134,120,.18);border-radius:50%;pointer-events:none;background-image:url('deco-circle.png');background-size:cover;background-position:center;background-repeat:no-repeat;opacity:.18;}
+.slidebar{position:absolute;top:15px;left:56px;right:56px;display:flex;justify-content:space-between;border-bottom:1px solid rgba(75,64,56,.35);padding-bottom:7px;font-size:15px;color:var(--umber);font-weight:600;letter-spacing:.02em;}
+h1{font-size:30px;line-height:1.18;margin:0 0 20px 0;font-weight:800;letter-spacing:0;color:var(--ink);}
+.body{height:590px;display:flex;flex-direction:column;gap:var(--gap-md);}
+.grid{display:grid;gap:var(--gap-lg);align-items:stretch;} .two{grid-template-columns:1fr 1fr;} .three{grid-template-columns:1fr 1fr 1fr;} .five{grid-template-columns:repeat(5,1fr);} .fourcards{grid-template-columns:repeat(4,1fr);} 
+.slide:has(.fig.has-image) .grid.two{align-items:center;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.bullets{font-size:22px;line-height:1.35;margin:0;padding-left:26px;} .bullets li{margin:8px 0;} .smallbullets{font-size:18px;line-height:1.32;margin:0;padding-left:22px;} .smallbullets li{margin:7px 0;}
+.take{margin-top:auto;border-top:3px solid var(--ink);padding:10px 14px;font-size:20px;line-height:1.35;background:linear-gradient(90deg,rgba(202,170,152,.32),rgba(242,232,223,.78));color:var(--ink);}
+.formula{border:1.5px solid var(--line);padding:22px;font-size:22px;text-align:center;background:var(--panel);margin-bottom:18px;box-shadow:inset 6px 0 0 var(--sand);} .formula span{display:block;font-size:40px;margin:10px 0;font-weight:800;color:var(--ink);} .formula small{font-size:17px;color:var(--umber);}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-md);margin-bottom:18px;} .compare>div{border:1.5px solid var(--line);padding:24px;text-align:center;font-size:24px;min-height:150px;background:linear-gradient(180deg,#fffaf6,var(--panel));box-shadow:0 8px 18px rgba(32,41,64,.08);} .mut{display:block;margin-top:18px;font-size:28px;font-weight:800;color:var(--umber);}
+.fig{border:2px dashed var(--taupe);background:rgba(255,253,249,.88);padding:16px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:var(--gap-sm);position:relative;width:var(--fig-w,var(--img-w,540px));height:var(--fig-h,var(--img-h,170px));max-width:100%;min-height:0;margin-left:auto;margin-right:auto;box-shadow:inset 0 0 0 1px rgba(202,170,152,.36);} .fig.has-image{padding:8px;background:#fffdf9;gap:var(--gap-xs);border-style:solid;overflow:hidden}.fig.has-image[data-caption]{padding-bottom:7px}.fig.has-image[data-caption]::after{content:attr(data-caption);display:block;width:100%;min-height:28px;padding:5px 8px;border-top:1px solid rgba(154,134,120,.38);font-size:13px;line-height:1.25;color:var(--umber);background:rgba(202,170,152,.16);text-align:left}.fig img.figure-img{display:block;max-width:100%;max-height:calc(100% - 36px);width:auto;height:auto;object-fit:contain}.fig:not([data-caption]) img.figure-img{max-height:100%}.fig .figure-pair{display:grid;grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:var(--gap-xs);width:100%;height:calc(100% - 36px);align-items:center;justify-items:center;overflow:hidden}.fig .figure-pair img{display:block;max-width:100%;height:100%;width:auto;object-fit:contain;min-height:0}.fig.tall{min-height:0}.figsize{font-size:13px;line-height:1.25;color:var(--taupe);border-top:1px solid rgba(154,134,120,.55);padding-top:6px;margin-top:2px;width:100%;}.figlabel{font-weight:800;font-size:22px;color:var(--ink)}.figdesc{font-size:18px;line-height:1.35;color:var(--umber);}
+.flow{display:flex;align-items:center;justify-content:center;gap:var(--gap-sm);flex-wrap:nowrap;margin:10px 0;} .flowbox{border:1.5px solid var(--line);min-height:70px;display:flex;align-items:center;justify-content:center;text-align:center;padding:12px 16px;font-size:19px;background:var(--panel);flex:1;box-shadow:inset 0 4px 0 rgba(202,170,152,.45);} .arrow{font-size:28px;font-weight:800;color:var(--umber);}
+.vflow{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--gap-xxs)}.vflowbox{border:1.5px solid var(--line);min-width:300px;padding:12px 18px;text-align:center;font-size:20px;background:var(--panel);box-shadow:inset 5px 0 0 rgba(202,170,152,.65)}.varrow{font-size:24px;font-weight:800;line-height:1;color:var(--umber);}
+.wideflow{display:flex;align-items:center;justify-content:space-between;gap:var(--gap-sm);margin:18px 0 24px;} .wideflow div{border:1.5px solid var(--line);flex:1;text-align:center;padding:18px 12px;min-height:115px;background:var(--panel);font-size:22px}.wideflow span{font-size:28px;font-weight:800;color:var(--umber)}.wideflow small{font-size:16px;line-height:1.25;color:var(--umber);}
+.card,.module,.step,.compareblock{border:1.5px solid var(--line);background:linear-gradient(180deg,#fffaf6,var(--panel));padding:18px;box-shadow:0 8px 18px rgba(32,41,64,.07);} .card h3,.module h3,.compareblock h3{margin:0 0 12px;font-size:24px;color:var(--ink)}.card p,.module p{font-size:19px;line-height:1.35;margin:0}.module small{font-size:18px;color:var(--taupe)}.step{font-size:18px;line-height:1.35;text-align:center}.question{border:1.5px solid var(--ink);padding:18px;background:linear-gradient(90deg,rgba(202,170,152,.42),#fffaf6);font-size:22px;line-height:1.35;margin-bottom:14px;}
+.pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--gap-md);margin:28px 0;} .pipeline.four{grid-template-columns:repeat(4,1fr)} .pipeline div{border:1.5px solid var(--line);text-align:center;padding:20px 12px;min-height:140px;background:var(--panel);font-size:20px;line-height:1.35}.pipeline small{font-size:16px;color:var(--taupe)}.logicline,.mechanism{border:1.5px solid var(--ink);background:var(--ink);color:#fffaf6;padding:24px;text-align:center;font-size:32px;font-weight:800;margin:12px 0;}
+.tagline,.hint,.warning,.counter,.decision-mini{border:1px solid var(--taupe);background:rgba(202,170,152,.25);padding:10px 14px;font-size:18px;margin-bottom:14px}.warning{border-style:dashed;background:rgba(154,134,120,.16)}.counter{text-align:center;font-size:22px;font-weight:800;color:var(--ink)}.minirow,.bigcompare{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-md);margin:14px 0}.minirow div,.bigcompare div{border:1.5px solid var(--line);background:var(--panel);text-align:center;padding:18px;font-size:20px}.bigcompare b{display:block;font-size:48px;margin-top:12px;color:var(--ink)}.bigcompare span{font-size:24px;color:var(--umber);}
+table.tbl{width:100%;border-collapse:collapse;font-size:18px;background:#fffdf9;box-shadow:0 8px 20px rgba(32,41,64,.06)} .tbl th,.tbl td{border:1.2px solid rgba(75,64,56,.45);padding:10px;vertical-align:top}.tbl th{background:var(--ink);color:#fffaf6;font-weight:800;text-align:left}.mousecard{border:1.5px solid var(--line);background:var(--panel);padding:24px;font-size:22px;line-height:1.35;height:100%;box-shadow:inset 6px 0 0 var(--sand);}
+.evidence{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap-md);margin:32px 0}.evidence div{border:1.5px solid var(--line);background:var(--panel);text-align:center;padding:28px 12px;min-height:160px;font-size:22px;line-height:1.35}
+.dualpath{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:var(--gap-md);height:100%;}.dualpath div{border:1.5px solid var(--line);background:var(--panel);padding:24px;text-align:center;font-size:24px;display:flex;align-items:center;justify-content:center;flex-direction:column}.dualpath .merge{grid-column:1/3;background:var(--ink);color:#fffaf6}.dualpath small{font-size:17px;}
+.tree .root{border:1.5px solid var(--ink);background:var(--ink);color:#fffaf6;width:340px;margin:20px auto 28px;padding:20px;text-align:center;font-size:28px;font-weight:800}.branches{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap-md)}.branches div{border:1.5px solid var(--line);background:var(--panel);padding:20px 14px;min-height:170px;font-size:19px;line-height:1.35;text-align:center}.checklist{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-md);margin:20px 0}.checklist div{border:1.5px solid var(--line);background:var(--panel);padding:20px;font-size:22px;text-align:center}.pyramid{display:flex;flex-direction:column;align-items:center;gap:var(--gap-xs);margin-bottom:12px}.pyramid div{border:1.5px solid var(--line);background:var(--panel);text-align:center;padding:10px 16px;font-size:18px}.pyramid div:nth-child(1){width:38%}.pyramid div:nth-child(2){width:48%}.pyramid div:nth-child(3){width:62%}.pyramid div:nth-child(4){width:76%}.pyramid div:nth-child(5){width:92%}.finalmodel{display:flex;align-items:center;gap:var(--gap-xs);margin:28px 0;}.finalmodel div{border:1.5px solid var(--line);background:var(--panel);text-align:center;padding:16px 10px;min-height:100px;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:19px;flex:1}.finalmodel span{font-size:26px;font-weight:800;color:var(--umber)}.finalmodel small{font-size:14px;line-height:1.25;color:var(--taupe)}
+.cover{display:grid;grid-template-columns:1fr 1fr;height:100%;align-items:center;padding:0;overflow:hidden}.cover-text{padding:60px 40px 60px 80px;display:flex;flex-direction:column;justify-content:center;text-align:left}.cover-text h1{font-size:42px;line-height:1.25;margin:0 0 28px;letter-spacing:.02em}.cover-text .subtitle{font-size:24px;color:var(--umber);margin-bottom:48px;line-height:1.4}.cover-text .team-info{font-size:17px;color:var(--umber);margin-bottom:6px;letter-spacing:.02em}.cover-text .logo-row{display:flex;align-items:center;gap:var(--gap-xl);margin-bottom:32px}.cover-text .logo-wrap{width:110px;height:110px;border-radius:50%;overflow:hidden;border:2px solid var(--taupe);background:#fffdf9}.cover-text .logo-wrap img{width:100%;height:100%;object-fit:cover}.cover-text .journal-logo{height:80px;width:auto}.cover-text .meta{font-size:18px;color:var(--taupe);line-height:1.6}.cover-img{position:relative;height:100%;overflow:hidden;display:flex;align-items:center;justify-content:center}.cover-img img{height:90%;width:auto;object-fit:contain;mask-image:linear-gradient(to right,transparent 0%,black 40%);-webkit-mask-image:linear-gradient(to right,transparent 0%,black 40%)}.task-cover{height:100%;padding:92px 88px 70px;display:flex;flex-direction:column;justify-content:center;position:relative;background:linear-gradient(180deg,var(--paper),#fffdf9);color:var(--ink);overflow:hidden}.task-cover::before{content:"";position:absolute;left:70px;right:70px;top:70px;bottom:58px;border:1.5px solid rgba(154,134,120,.34);pointer-events:none}.task-cover::after{content:"";position:absolute;right:48px;bottom:34px;width:220px;height:220px;border:1px solid rgba(154,134,120,.16);border-radius:50%;box-shadow:0 0 0 32px rgba(202,170,152,.08),0 0 0 64px rgba(202,170,152,.045);pointer-events:none}.task-cover .eyebrow{font-size:22px;letter-spacing:.12em;font-weight:800;color:var(--umber);margin-bottom:22px;padding-left:18px;border-left:6px solid var(--sand)}.task-cover h1{font-size:56px;line-height:1.12;color:var(--ink);margin:0 0 28px;max-width:880px}.task-cover .summary{font-size:24px;line-height:1.45;max-width:760px;color:var(--umber)}.task-cover .range{position:absolute;left:88px;bottom:66px;font-size:18px;letter-spacing:.06em;color:var(--taupe)}.task-cover .task-num{position:absolute;right:90px;top:68px;font-size:118px;line-height:1;font-weight:900;color:rgba(75,64,56,.075)}.slide--cover::after,.slide--toc::after{display:none}.toc{padding:50px 80px 44px}.toc h1{font-size:34px;margin:0 0 36px;text-align:center}.toc ol{list-style:none;counter-reset:toc;max-width:820px;margin:0 auto;padding:0}.toc li{counter-increment:toc;display:flex;align-items:center;gap:var(--gap-md);padding:18px 24px;margin-bottom:14px;border:1.5px solid var(--line);background:var(--panel);font-size:22px;line-height:1.35}.toc li::before{content:counter(toc);display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fffaf6;font-weight:800;font-size:22px;flex-shrink:0}
+@page{size:16in 9in;margin:0;}
+@media print{html,body{width:16in;height:9in;background:#fff}.slide{margin:0;box-shadow:none;page-break-after:always;width:16in;height:9in;aspect-ratio:auto;border-color:rgba(202,170,152,.95);}}
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--ink);overflow:hidden;
+  font-family:"Source Han Serif SC","Noto Serif CJK SC","Songti SC","Noto Sans SC","Microsoft YaHei",serif;
+  display:flex;height:100vh;
+}
+
+/* Thumbnail sidebar */
+.thumb-panel{
+  width:170px;min-width:170px;height:100vh;
+  background:rgba(32,41,64,.95);
+  overflow-y:auto;overflow-x:hidden;
+  padding:8px 7px;flex-shrink:0;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(202,170,152,.35) transparent;
+}
+.thumb-panel::-webkit-scrollbar{width:4px}
+.thumb-panel::-webkit-scrollbar-thumb{background:rgba(202,170,152,.35);border-radius:2px}
+.thumb-item{
+  width:100%;padding:8px 6px;
+  border:1.5px solid rgba(202,170,152,.15);
+  border-radius:3px;margin-bottom:5px;cursor:pointer;
+  background:rgba(255,253,249,.06);
+  transition:border-color .2s,background .2s;
+}
+.thumb-item:hover{border-color:rgba(202,170,152,.5);background:rgba(255,253,249,.1)}
+.thumb-item.active{border-color:var(--sand);background:rgba(202,170,152,.15)}
+.thumb-num{
+  font-size:10px;color:var(--sand);font-weight:700;
+  margin-bottom:2px;display:block;
+}
+.thumb-title{
+  font-size:11px;color:rgba(255,250,246,.75);line-height:1.35;
+  display:block;word-break:break-all;
+}
+.thumb-section{
+  font-size:9px;color:rgba(255,250,246,.4);margin-top:2px;display:block;
+}
+
+/* Main area */
+.slide-area{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  height:100vh;overflow:hidden;position:relative;
+}
+.slide{
+  display:none;
+  width:calc(100vh * 16 / 9);height:100vh;
+  max-width:calc(100vw - 170px);
+  max-height:calc((100vw - 170px) * 9 / 16);
+  background:linear-gradient(180deg,var(--paper),#fffdf9);
+  border:1.5px solid rgba(202,170,152,.95);
+  overflow:hidden;aspect-ratio:16/9;position:relative;
+}
+.slide.active{display:block}
+
+/* Fullscreen */
+body:fullscreen .thumb-panel,body:-webkit-full-screen .thumb-panel{display:none}
+body:fullscreen,body:-webkit-full-screen{justify-content:center}
+body:fullscreen .slide,body:-webkit-full-screen .slide{
+  max-width:100vw;max-height:calc(100vw * 9 / 16);
+}
+
+/* Controls */
+.nav-controls{
+  position:fixed;bottom:8px;right:8px;
+  display:flex;align-items:center;gap:var(--gap-xxs);
+  z-index:9999;opacity:0.4;transition:opacity .3s;
+}
+.nav-controls:hover{opacity:1}
+.nav-btn{
+  background:rgba(32,41,64,.8);color:#fffaf6;
+  border:1px solid rgba(202,170,152,.3);border-radius:3px;
+  padding:4px 9px;font-size:12px;cursor:pointer;font-family:inherit;
+}
+.nav-btn:hover{background:rgba(32,41,64,.95)}
+#slide-counter{color:rgba(255,250,246,.55);font-size:11px;min-width:36px;text-align:center}
+#progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--sand);transition:width .3s;z-index:9999}
+/* PPTX export button/status */
+.export-btn{min-width:76px;font-weight:700}
+#export-status{color:rgba(255,250,246,.75);font-size:11px;min-width:80px;text-align:left}
+.export-hidden-stage{position:fixed;left:-99999px;top:0;width:1280px;height:720px;overflow:hidden;background:transparent;z-index:-1;pointer-events:none}
+.export-hidden-stage .slide{display:block!important;position:relative!important;left:auto!important;top:auto!important;transform:none!important;width:1280px!important;height:720px!important;min-width:1280px!important;min-height:720px!important;max-width:none!important;max-height:none!important;margin:0!important;box-shadow:none!important}
+@media print{.export-btn,#export-status{display:none!important}}
+
+@media print{
+  .slide{display:block!important;position:static;transform:none;width:16in;height:9in;max-width:none;max-height:none;page-break-after:always}
+  .nav-controls,#progress-bar,.thumb-panel{display:none!important}
+  body{display:block}
+}
+
+
+
+.slide{width:1280px;height:720px;aspect-ratio:auto;}
+.fig img.figure-img,.fig .figure-pair img{object-fit:contain;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 图片均衡最大化调整：在不遮挡文字/表格的前提下，扩大图片显示面积并保持原始比例 */
+.fig.has-image{gap:var(--gap-xxs);}
+.fig.has-image[data-caption]::after{min-height:24px;padding:4px 7px;font-size:12.5px;line-height:1.18;}
+.fig img.figure-img{max-height:calc(100% - 30px);}
+.fig .figure-pair{height:calc(100% - 30px);}
+
+
+
+.cover-img img{height:96%;max-width:100%;}
+
+/* === CSS Variables for easy global adjustment === */
+:root{
+  --gap-xxs:4px;--gap-xs:6px;--gap-sm:10px;--gap-md:14px;--gap-lg:18px;--gap-xl:20px;
+  --radius:3px;
+  --text-xs:13px;--text-sm:17px;--text-base:20px;--text-md:22px;--text-lg:26px;--text-xl:30px;--text-2xl:42px;--text-hero:56px;
+}
+
+/* === Slide type classes (replace fragile nth-of-type) === */
+/* 封面页: <section class="slide slide--cover" data-title="封面页" data-section="首页 / 标题 / 汇报信息"> */
+
+/* 目录页: <section class="slide slide--toc" data-title="目录页" data-section="目录 / 汇报结构"> */
+.slide--toc::after{display:none}
+
+/* === Layout helper classes === */
+/* Two-column layouts - apply to the .grid.two inside a slide */
+.layout-cols-40-60 .grid.two{grid-template-columns:.40fr .60fr}
+.layout-cols-45-55 .grid.two{grid-template-columns:.45fr .55fr}
+.layout-cols-50-50 .grid.two{grid-template-columns:1fr 1fr}
+.layout-cols-55-45 .grid.two{grid-template-columns:.55fr .45fr}
+.layout-cols-60-40 .grid.two{grid-template-columns:.60fr .40fr}
+.layout-cols-76-24 .grid.two{grid-template-columns:.76fr 1.24fr}
+.layout-cols-82-18 .grid.two{grid-template-columns:.82fr 1.18fr}
+.layout-cols-86-14 .grid.two{grid-template-columns:.86fr 1.14fr}
+.layout-cols-90-10 .grid.two{grid-template-columns:.9fr 1.1fr}
+.layout-cols-95-05 .grid.two{grid-template-columns:.95fr 1.05fr}
+
+/* Figure size presets - apply to .fig element */
+.fig--sm{--fig-h:150px}
+.fig--md{--fig-h:235px}
+.fig--lg{--fig-h:340px}
+.fig--xl{--fig-h:400px}
+.fig--full{--fig-h:460px}
+
+/* Font size presets for slide content */
+.text-sm-slide .bullets{font-size:var(--text-sm);line-height:1.22}
+.text-sm-slide .bullets li{margin:5px 0}
+.text-sm-slide .take{font-size:var(--text-base);line-height:1.25}
+
+/* Slide-level spacing presets */
+.gap-compact .body{gap:var(--gap-sm)}
+.gap-normal .body{gap:var(--gap-md)}
+.gap-relaxed .body{gap:var(--gap-lg)}
+
+</style>
+<style id="fixed-canvas-scale-and-fig1c">
+/* Fixed 16:9 canvas: slide content never reflows; the outer stage scales the whole page. */
+.slide-area{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  width:calc(100vw - 170px);height:100vh;overflow:hidden;position:relative;
+}
+.stage{position:relative;flex:0 0 auto;}
+.deck{
+  width:1280px;height:720px;position:relative;
+  transform-origin:top left;
+}
+.slide{
+  width:1280px!important;height:720px!important;
+  min-width:1280px!important;min-height:720px!important;
+  max-width:none!important;max-height:none!important;
+  aspect-ratio:auto!important;margin:0!important;
+}
+.fig img.figure-img,.fig .figure-pair img{object-fit:contain!important;}
+body:fullscreen .slide-area,body:-webkit-full-screen .slide-area{width:100vw;}
+body:fullscreen .slide,body:-webkit-full-screen .slide{max-width:none!important;max-height:none!important;}
+
+/* Page 8/38, Figure 1C: enlarge 1C by borrowing space from the comparison cards and slightly tightening 1B. */
+
+
+
+
+
+
+
+
+
+
+
+</style>
+</head>
+<body>
+<div class="thumb-panel" id="thumb-panel"></div>
+<div class="slide-area">
+<section class="slide slide--cover" data-title="封面页" data-section="首页 / 标题 / 汇报信息"><div class="cover"><div class="cover-text"><div class="eyebrow">课程 / 汇报 / 项目</div><h1>在这里输入主标题</h1><p class="subtitle">在这里输入副标题或英文标题</p><div class="team-info">汇报人：姓名<br/>单位：学院 / 班级 / 小组<br/>日期：YYYY.MM.DD</div></div><div class="cover-img"><div class="fig" style="height:360px;display:flex;align-items:center;justify-content:center;">封面图片 / Logo 占位</div></div></div></section><section class="slide slide--toc" data-title="目录页" data-section="目录 / 汇报结构"><div class="toc"><h1>目 录</h1><ol><li>章节标题占位</li><li>章节标题占位</li><li>章节标题占位</li><li>章节标题占位</li><li>章节标题占位</li></ol></div></section><section class="slide task-divider slide--divider" data-title="主题页" data-section="章节分隔 / PART 标题"><div class="task-cover"><div class="task-num">01</div><div class="eyebrow">PART 01</div><h1>章节标题</h1><p>用一句话说明本章节要解决的问题。</p></div></section>
+</div>
+<div class="nav-controls">
+<button class="nav-btn" id="btn-prev">‹</button>
+<span id="slide-counter">1/3</span>
+<button class="nav-btn" id="btn-next">›</button>
+<button class="nav-btn" id="btn-fs">⛶</button>
+<button class="nav-btn export-btn" id="btn-export-pptx" title="将每页以高清截图写入 PPTX，保持 16:9 比例">导出PPTX</button>
+<span aria-live="polite" id="export-status"></span>
+</div>
+<div id="progress-bar" style="width:2.2222%"></div>
+<script>
+(function(){
+  var slides=document.querySelectorAll('.slide');
+  var total=slides.length;
+  var current=0;
+  var counter=document.getElementById('slide-counter');
+  var bar=document.getElementById('progress-bar');
+  var thumbPanel=document.getElementById('thumb-panel');
+
+  // --- Dynamic thumbnail generation ---
+  // Each slide can declare metadata via data-title and data-section attributes.
+  // Fallback: derive title from h1 / .eyebrow / "Slide N".
+  function buildThumbs(){
+    thumbPanel.innerHTML='';
+    var sectionLabels=[
+      {cls:'slide--cover',title:'封面页',section:'首页 / 标题 / 汇报信息'},
+      {cls:'slide--toc',title:'目录页',section:'目录 / 汇报结构'},
+      {cls:'slide--divider',title:'主题页',section:'章节分隔 / PART 标题'}
+    ];
+    for(var i=0;i<total;i++){
+      var s=slides[i];
+      var label={title:'Slide '+(i+1),section:''};
+      // Check data-attributes first
+      if(s.dataset.title) label.title=s.dataset.title;
+      if(s.dataset.section) label.section=s.dataset.section;
+      // Then check known classes
+      if(!s.dataset.title){
+        for(var k=0;k<sectionLabels.length;k++){
+          if(s.classList.contains(sectionLabels[k].cls)){
+            label.title=sectionLabels[k].title;
+            label.section=sectionLabels[k].section;
+            break;
+          }
+        }
+        // Fallback: use h1 text
+        if(!s.classList.contains('slide--cover')&&!s.classList.contains('slide--toc')&&!s.classList.contains('slide--divider')){
+          var h1=s.querySelector('h1');
+          if(h1) label.title=h1.textContent.trim().slice(0,20);
+        }
+      }
+      var item=document.createElement('div');
+      item.className='thumb-item'+(i===current?' active':'');
+      item.innerHTML='<span class="thumb-num">'+(i+1)+'</span><span class="thumb-title">'+label.title+'</span>'+(label.section?'<span class="thumb-section">'+label.section+'</span>':'');
+      (function(idx){item.addEventListener('click',function(){show(idx)})})(i);
+      thumbPanel.appendChild(item);
+    }
+  }
+  buildThumbs();
+
+  function show(n){
+    if(n<0||n>=total)return;
+    current=n;
+    for(var i=0;i<total;i++){
+      slides[i].classList.toggle('active',i===n);
+    }
+    var thumbs=thumbPanel.querySelectorAll('.thumb-item');
+    for(var i=0;i<thumbs.length;i++){
+      thumbs[i].classList.toggle('active',i===n);
+    }
+    counter.textContent=(current+1)+'/'+total;
+    bar.style.width=((current+1)/total*100)+'%';
+    if(thumbs[n])thumbs[n].scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+  function next(){show(current+1)}
+  function prev(){show(current-1)}
+  function goFS(){
+    var el=document.documentElement;
+    if(!document.fullscreenElement)(el.requestFullscreen||el.webkitRequestFullscreen||el.msRequestFullscreen).call(el);
+    else(document.exitFullscreen||document.webkitExitFullscreen||document.msExitFullscreen).call(document);
+  }
+
+  document.addEventListener('keydown',function(e){
+    var k=e.key;
+    if(k==='ArrowRight'||k===' '||k==='ArrowDown'||k==='PageDown'){e.preventDefault();next()}
+    else if(k==='ArrowLeft'||k==='ArrowUp'||k==='PageUp'){e.preventDefault();prev()}
+    else if(k==='f'||k==='F'){e.preventDefault();goFS()}
+    else if(k==='Home'){e.preventDefault();show(0)}
+    else if(k==='End'){e.preventDefault();show(total-1)}
+    else if(k==='Escape'&&document.fullscreenElement)(document.exitFullscreen||document.webkitExitFullscreen).call(document);
+  });
+
+  document.getElementById('btn-prev').onclick=function(e){e.stopPropagation();prev()};
+  document.getElementById('btn-next').onclick=function(e){e.stopPropagation();next()};
+  document.getElementById('btn-fs').onclick=function(e){e.stopPropagation();goFS()};
+
+  show(0);
+})();
+</script>
+<script id="pptx-exporter">
+(function(){
+  var EXPORT_W = 1280;
+  var EXPORT_H = 720;
+  var PPT_W = 13.333333;
+  var PPT_H = 7.5;
+  var EXPORT_SCALE = 2.5; // 3200×1800 screenshots: clear text/figures without huge files.
+  var btn = document.getElementById('btn-export-pptx');
+  var status = document.getElementById('export-status');
+
+  function setStatus(text){ if(status) status.textContent = text || ''; }
+
+  function loadScript(src){
+    return new Promise(function(resolve,reject){
+      var found = Array.prototype.slice.call(document.scripts).find(function(s){ return s.src === src; });
+      if(found){ resolve(); return; }
+      var script=document.createElement('script');
+      script.src=src;
+      script.async=true;
+      script.onload=function(){ resolve(); };
+      script.onerror=function(){ reject(new Error('无法加载导出依赖：'+src)); };
+      document.head.appendChild(script);
+    });
+  }
+
+  async function ensureExportLibraries(){
+    if(!window.html2canvas){
+      await loadScript('lib/html2canvas.min.js');
+    }
+    if(!(window.pptxgen || window.PptxGenJS)){
+      await loadScript('lib/pptxgen.bundle.js');
+    }
+    if(!window.html2canvas) throw new Error('html2canvas 未成功加载');
+    if(!(window.pptxgen || window.PptxGenJS)) throw new Error('pptxgenjs 未成功加载');
+  }
+
+  function waitForImages(root){
+    var imgs=Array.prototype.slice.call(root.querySelectorAll('img'));
+    return Promise.all(imgs.map(function(img){
+      if(img.complete && img.naturalWidth>0) return Promise.resolve();
+      return new Promise(function(resolve){
+        img.onload=resolve;
+        img.onerror=resolve;
+        setTimeout(resolve,3000);
+      });
+    }));
+  }
+
+  async function renderSlideToImage(slideEl){
+    var stage=document.createElement('div');
+    stage.className='export-hidden-stage';
+    var clone=slideEl.cloneNode(true);
+    clone.classList.add('active');
+    clone.style.display='block';
+    stage.appendChild(clone);
+    document.body.appendChild(stage);
+    await waitForImages(stage);
+    await document.fonts.ready.catch(function(){});
+    var canvas = await window.html2canvas(clone, {
+      scale: EXPORT_SCALE,
+      backgroundColor: null,
+      useCORS: true,
+      allowTaint: true,
+      logging: false,
+      width: EXPORT_W,
+      height: EXPORT_H,
+      windowWidth: EXPORT_W,
+      windowHeight: EXPORT_H,
+      scrollX: 0,
+      scrollY: 0
+    });
+    document.body.removeChild(stage);
+    return canvas.toDataURL('image/png');
+  }
+
+  async function exportToPPTX(){
+    await ensureExportLibraries();
+    var PptxCtor = window.pptxgen || window.PptxGenJS;
+    var pptx = new PptxCtor();
+    if(pptx.defineLayout){
+      pptx.defineLayout({ name:'HTML_16_9', width:PPT_W, height:PPT_H });
+      pptx.layout = 'HTML_16_9';
+    }else{
+      pptx.layout = 'LAYOUT_WIDE';
+    }
+    pptx.author = 'ChatGPT HTML PPT exporter';
+    pptx.subject = 'Slides rendered from fixed 1280×720 HTML canvas';
+    pptx.title = document.title || 'presentation';
+    pptx.company = '';
+    pptx.lang = 'zh-CN';
+
+    var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+    for(var i=0;i<slides.length;i++){
+      setStatus('导出 '+(i+1)+'/'+slides.length);
+      var img = await renderSlideToImage(slides[i]);
+      var p = pptx.addSlide();
+      p.background = { color: 'FFFFFF' };
+      p.addImage({ data: img, x: 0, y: 0, w: PPT_W, h: PPT_H });
+    }
+    setStatus('正在保存…');
+    await pptx.writeFile({ fileName: 'presentation_exported_16x9.pptx' });
+    setStatus('完成');
+    setTimeout(function(){ setStatus(''); }, 3000);
+  }
+
+  window.exportToPPTX = exportToPPTX;
+  if(btn){
+    btn.addEventListener('click', async function(e){
+      e.stopPropagation();
+      if(btn.disabled) return;
+      btn.disabled = true;
+      var oldText = btn.textContent;
+      btn.textContent = '导出中';
+      try{
+        await exportToPPTX();
+      }catch(err){
+        console.error(err);
+        setStatus('导出失败');
+        alert('导出 PPTX 失败：' + (err && err.message ? err.message : err));
+      }finally{
+        btn.disabled = false;
+        btn.textContent = oldText;
+      }
+    });
+  }
+})();
+</script>
+<script id="fixed-canvas-scaler">
+(function(){
+  var area=document.querySelector('.slide-area');
+  if(!area || document.querySelector('.deck')) return;
+  var slides=Array.prototype.slice.call(area.querySelectorAll('.slide'));
+  var stage=document.createElement('div');
+  stage.className='stage';
+  var deck=document.createElement('div');
+  deck.className='deck';
+  area.insertBefore(stage, slides[0] || null);
+  stage.appendChild(deck);
+  slides.forEach(function(slide){deck.appendChild(slide);});
+
+  function fitDeck(){
+    var w=area.clientWidth || window.innerWidth;
+    var h=area.clientHeight || window.innerHeight;
+    var scale=Math.min(w/1280, h/720);
+    if(!isFinite(scale) || scale<=0) scale=0.1;
+    scale=Math.max(0.10, scale);
+    stage.style.width=(1280*scale)+'px';
+    stage.style.height=(720*scale)+'px';
+    deck.style.transform='scale('+scale+')';
+  }
+  window.addEventListener('resize', fitDeck);
+  document.addEventListener('fullscreenchange', fitDeck);
+  document.addEventListener('webkitfullscreenchange', fitDeck);
+  fitDeck();
+})();
+</script>
+</body></html>
