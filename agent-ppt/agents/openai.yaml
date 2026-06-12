@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent PPT"
+  short_description: "Turn outlines into HTML template slide decks."
+  default_prompt: "Use $agent-ppt to create or revise a deck from my outline using the project HTML template."
