@@ -22,6 +22,7 @@ const { spawn } = require('child_process');
 const ROOT = __dirname;
 const HTML_FILE = path.join(ROOT, '模板.html');
 const OUT_FILE = path.join(ROOT, 'presentation_components.pptx');
+const EDITABLE_OUT_FILE = path.join(ROOT, 'presentation_editable_text.pptx');
 const EXPORT_W = 1280;
 const EXPORT_H = 720;
 const DEVICE_SCALE = Number(process.env.COMPONENT_EXPORT_SCALE || process.env.EXPORT_SCALE || 3);
@@ -286,6 +287,96 @@ async function getSlideComponents(cdp, sessionId, url) {
         function hasText(el) {
           return (el.innerText || el.textContent || "").replace(/\s+/g, "").length > 0;
         }
+        function cssNumber(value) {
+          var n = parseFloat(value);
+          return Number.isFinite(n) ? n : 0;
+        }
+        function isBold(weight) {
+          return weight === "bold" || weight === "bolder" || Number(weight) >= 600;
+        }
+        function isItalic(style) {
+          return style === "italic" || style === "oblique";
+        }
+        function collectTextRuns(el) {
+          var runs = [];
+          function pushText(text, sourceEl) {
+            if (!text) return;
+            var normalized = text.replace(/[\\t\\r ]+/g, " ");
+            if (!normalized.replace(/\\s+/g, "")) return;
+            var cs = getComputedStyle(sourceEl || el);
+            runs.push({
+              text: normalized,
+              bold: isBold(cs.fontWeight),
+              italic: isItalic(cs.fontStyle),
+              color: cs.color,
+              fontSize: cssNumber(cs.fontSize),
+              fontFamily: cs.fontFamily || "",
+              lang: /[\\u4e00-\\u9fff]/.test(normalized) ? "zh-CN" : "en-US"
+            });
+          }
+          function walk(node, inheritedEl) {
+            if (node.nodeType === Node.TEXT_NODE) {
+              pushText(node.textContent, inheritedEl);
+              return;
+            }
+            if (node.nodeType !== Node.ELEMENT_NODE) return;
+            var childEl = node;
+            if (childEl.tagName === "BR") {
+              runs.push({ text: "\\n", break: true });
+              return;
+            }
+            var cs = getComputedStyle(childEl);
+            var block = ["block", "list-item", "table-row"].indexOf(cs.display) >= 0;
+            if (block && runs.length && !runs[runs.length - 1].break) runs.push({ text: "\\n", break: true });
+            Array.from(childEl.childNodes).forEach(function(child) { walk(child, childEl); });
+            if (block && runs.length && !runs[runs.length - 1].break) runs.push({ text: "\\n", break: true });
+          }
+          Array.from(el.childNodes).forEach(function(child) { walk(child, el); });
+          while (runs.length && runs[0].break) runs.shift();
+          while (runs.length && runs[runs.length - 1].break) runs.pop();
+          return runs;
+        }
+        function pseudoHasContent(el, pseudo) {
+          var cs = getComputedStyle(el, pseudo);
+          var content = cs && cs.content;
+          return Boolean(content && content !== "none" && content !== "normal" && content !== '""' && content !== "''");
+        }
+        function nativeTextInfo(el) {
+          var cs = getComputedStyle(el);
+          var text = (el.innerText || el.textContent || "").replace(/\\s+$/g, "");
+          var hasMedia = Boolean(el.querySelector("img,svg,canvas,video"));
+          var hasSpecialText = cs.textShadow && cs.textShadow !== "none";
+          var transformed = cs.transform && cs.transform !== "none";
+          var pseudoText = pseudoHasContent(el, "::before") || pseudoHasContent(el, "::after");
+          var runs = collectTextRuns(el);
+          var eligible = Boolean(text.replace(/\\s+/g, ""))
+            && !hasMedia
+            && !hasSpecialText
+            && !transformed
+            && !pseudoText
+            && runs.length <= 80;
+          return {
+            eligible: eligible,
+            reason: eligible ? "" : (hasMedia ? "media" : hasSpecialText ? "text-shadow" : transformed ? "transform" : pseudoText ? "pseudo" : "complex"),
+            text: text,
+            runs: runs,
+            fontFamily: cs.fontFamily || "",
+            fontSize: cssNumber(cs.fontSize),
+            color: cs.color,
+            bold: isBold(cs.fontWeight),
+            italic: isItalic(cs.fontStyle),
+            textAlign: cs.textAlign || "left",
+            verticalAlign: cs.verticalAlign || "top",
+            lineHeight: cs.lineHeight === "normal" ? 0 : cssNumber(cs.lineHeight),
+            singleLine: text.indexOf("\\n") < 0,
+            padding: {
+              top: cssNumber(cs.paddingTop),
+              right: cssNumber(cs.paddingRight),
+              bottom: cssNumber(cs.paddingBottom),
+              left: cssNumber(cs.paddingLeft)
+            }
+          };
+        }
         function pushItem(el, kind, capture, layer, seq) {
           var r = el.getBoundingClientRect();
           if (r.width <= 2 || r.height <= 2) return;
@@ -307,7 +398,8 @@ async function getSlideComponents(cdp, sessionId, url) {
               y: r.y - sr.y,
               w: r.width,
               h: r.height,
-              text: (el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 50)
+              text: (el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 50),
+              nativeText: kind === "text" ? nativeTextInfo(el) : null
             });
         }
         function addComponent(el) {
@@ -644,6 +736,36 @@ function xmlEscape(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+function clampInt(value, min, max) {
+  return Math.max(min, Math.min(max, Math.round(value)));
+}
+
+function cssColorToHex(color, fallback = '000000') {
+  const text = String(color || '').trim();
+  let match = text.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+  if (match) {
+    const hex = match[1];
+    return hex.length === 3
+      ? hex.split('').map(ch => ch + ch).join('').toUpperCase()
+      : hex.toUpperCase();
+  }
+  match = text.match(/^rgba?\(([^)]+)\)$/i);
+  if (!match) return fallback;
+  const parts = match[1].split(',').map(part => Number(String(part).trim().replace('%', '')));
+  if (parts.length < 3 || parts.slice(0, 3).some(Number.isNaN)) return fallback;
+  return parts.slice(0, 3)
+    .map(value => clampInt(value, 0, 255).toString(16).padStart(2, '0'))
+    .join('')
+    .toUpperCase();
+}
+
+function cssFontFamilyToPpt(fontFamily) {
+  return String(fontFamily || 'Arial')
+    .split(',')[0]
+    .trim()
+    .replace(/^["']|["']$/g, '') || 'Arial';
+}
+
 function buildContentTypes(slides) {
   let overrides = '';
   for (let si = 0; si < slides.length; si++) {
@@ -745,7 +867,7 @@ function buildSlideLayoutRels() {
 </Relationships>`;
 }
 
-function buildSlideXml(slideIndex, comps) {
+function buildSlideXml(slideIndex, comps, options = {}) {
   let shapeId = 2;
 
   function picXml(relId, xEmu, yEmu, wEmu, hEmu, name) {
@@ -755,18 +877,85 @@ function buildSlideXml(slideIndex, comps) {
 <p:spPr><a:xfrm><a:off x="${xEmu}" y="${yEmu}"/><a:ext cx="${wEmu}" cy="${hEmu}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></p:spPr></p:pic>`;
   }
 
+  function textRunXml(run, fallback) {
+    const text = run && run.text != null ? String(run.text) : '';
+    if (!text) return '';
+    const fontSizePx = Number(run.fontSize || fallback.fontSize || 16);
+    const fontSize = clampInt(fontSizePx * 75, 100, 12000);
+    const fontFace = xmlEscape(cssFontFamilyToPpt(run.fontFamily || fallback.fontFamily));
+    const color = cssColorToHex(run.color || fallback.color, '000000');
+    const lang = xmlEscape(run.lang || 'zh-CN');
+    const bold = run.bold ? ' b="1"' : '';
+    const italic = run.italic ? ' i="1"' : '';
+    return `<a:r><a:rPr lang="${lang}" sz="${fontSize}"${bold}${italic}><a:solidFill><a:srgbClr val="${color}"/></a:solidFill><a:latin typeface="${fontFace}"/><a:ea typeface="${fontFace}"/><a:cs typeface="${fontFace}"/></a:rPr><a:t>${xmlEscape(text)}</a:t></a:r>`;
+  }
+
+  function splitRunsToParagraphs(runs, fallbackText) {
+    const source = Array.isArray(runs) && runs.length ? runs : [{ text: fallbackText || '' }];
+    const paragraphs = [[]];
+    for (const run of source) {
+      const text = run && run.text != null ? String(run.text) : '';
+      if (run && run.break) {
+        paragraphs.push([]);
+        continue;
+      }
+      const parts = text.split('\n');
+      parts.forEach((part, index) => {
+        if (index > 0) paragraphs.push([]);
+        if (part) paragraphs[paragraphs.length - 1].push({ ...run, text: part });
+      });
+    }
+    return paragraphs.length ? paragraphs : [[]];
+  }
+
+  function textXml(comp, xEmu, yEmu, wEmu, hEmu, name) {
+    const id = shapeId++;
+    const info = comp.nativeText || {};
+    const padding = info.padding || {};
+    const lIns = Math.round((Number(padding.left) || 0) * PX_TO_EMU);
+    const rIns = Math.round((Number(padding.right) || 0) * PX_TO_EMU);
+    const tIns = Math.round((Number(padding.top) || 0) * PX_TO_EMU);
+    const bIns = Math.round((Number(padding.bottom) || 0) * PX_TO_EMU);
+    const alignMap = { center: 'ctr', right: 'r', end: 'r', left: 'l', start: 'l' };
+    const algn = alignMap[info.textAlign] || 'l';
+    const fontSizePx = Number(info.fontSize || 16);
+    const defaultSize = clampInt(fontSizePx * 75, 100, 12000);
+    const defaultFont = xmlEscape(cssFontFamilyToPpt(info.fontFamily));
+    const defaultColor = cssColorToHex(info.color, '000000');
+    const lineHeight = Number(info.lineHeight || 0);
+    const lnSpc = lineHeight > 0 ? `<a:lnSpc><a:spcPts val="${clampInt(lineHeight * 75, 100, 12000)}"/></a:lnSpc>` : '';
+    const fallback = {
+      fontSize: fontSizePx,
+      fontFamily: info.fontFamily || 'Arial',
+      color: info.color || 'rgb(0, 0, 0)'
+    };
+    const paragraphs = splitRunsToParagraphs(info.runs, info.text || comp.text || '');
+    const wrap = info.singleLine ? 'none' : 'square';
+    const parasXml = paragraphs.map(paragraphRuns => {
+      const runsXml = paragraphRuns.map(run => textRunXml(run, fallback)).join('');
+      return `<a:p><a:pPr algn="${algn}">${lnSpc}</a:pPr>${runsXml}<a:endParaRPr lang="zh-CN" sz="${defaultSize}"><a:solidFill><a:srgbClr val="${defaultColor}"/></a:solidFill><a:latin typeface="${defaultFont}"/><a:ea typeface="${defaultFont}"/><a:cs typeface="${defaultFont}"/></a:endParaRPr></a:p>`;
+    }).join('');
+    return `<p:sp><p:nvSpPr><p:cNvPr id="${id}" name="${xmlEscape(name)}"/><p:cNvSpPr txBox="1"/><p:nvPr/></p:nvSpPr>
+<p:spPr><a:xfrm><a:off x="${xEmu}" y="${yEmu}"/><a:ext cx="${wEmu}" cy="${hEmu}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/><a:ln><a:noFill/></a:ln></p:spPr>
+<p:txBody><a:bodyPr wrap="${wrap}" lIns="${lIns}" tIns="${tIns}" rIns="${rIns}" bIns="${bIns}" anchor="t"><a:noAutofit/></a:bodyPr><a:lstStyle/>${parasXml}</p:txBody></p:sp>`;
+  }
+
   let imagesXml = '';
   // Background: uses rId1, covers entire slide
   imagesXml += picXml('rId1', 0, 0, PPT_W_EMU, PPT_H_EMU, `Slide ${slideIndex} Background`);
 
-  // Components: use rId2, rId3, ...
+  // Components: use rId2, rId3, ... for captured PNG layers.
   comps.forEach((comp, ci) => {
-    const relId = `rId${ci + 2}`;
+    const relId = `rId${Number(comp.mediaIndex) + 2}`;
     const xEmu = Math.round(comp.x * PX_TO_EMU);
     const yEmu = Math.round(comp.y * PX_TO_EMU);
     const wEmu = Math.round(comp.w * PX_TO_EMU);
     const hEmu = Math.round(comp.h * PX_TO_EMU);
-    imagesXml += picXml(relId, xEmu, yEmu, wEmu, hEmu, `Component ${ci + 1}`);
+    if (options.editableText && comp.renderAs === 'nativeText') {
+      imagesXml += textXml(comp, xEmu, yEmu, wEmu, hEmu, `Editable Text ${ci + 1}`);
+    } else {
+      imagesXml += picXml(relId, xEmu, yEmu, wEmu, hEmu, `Component ${ci + 1}`);
+    }
   });
 
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -779,18 +968,20 @@ ${imagesXml}
 </p:sld>`;
 }
 
-function buildSlideRels(slideIndex, compCount) {
+function buildSlideRels(slideIndex, components) {
   const rels = [];
   rels.push(`<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/s${slideIndex}_bg.png"/>`);
-  for (let ci = 0; ci < compCount; ci++) {
-    rels.push(`<Relationship Id="rId${ci + 2}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/s${slideIndex}_c${ci}.png"/>`);
+  const imageComponents = components.filter(comp => comp.renderAs !== 'nativeText');
+  for (const comp of imageComponents) {
+    const mediaIndex = Number(comp.mediaIndex);
+    rels.push(`<Relationship Id="rId${mediaIndex + 2}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/s${slideIndex}_c${mediaIndex}.png"/>`);
   }
-  rels.push(`<Relationship Id="rId${compCount + 2}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout" Target="../slideLayouts/slideLayout1.xml"/>`);
+  rels.push(`<Relationship Id="rId${imageComponents.length + 2}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout" Target="../slideLayouts/slideLayout1.xml"/>`);
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${rels.join('')}</Relationships>`;
 }
 
-function buildPptx(slides, outFile) {
+function buildPptx(slides, outFile, options = {}) {
   const now = new Date().toISOString();
   const entries = [];
 
@@ -819,10 +1010,10 @@ function buildPptx(slides, outFile) {
     const slideNum = si + 1;
 
     // slide XML
-    entries.push({ name: `ppt/slides/slide${slideNum}.xml`, data: buildSlideXml(slideNum, s.components) });
+    entries.push({ name: `ppt/slides/slide${slideNum}.xml`, data: buildSlideXml(slideNum, s.components, options) });
 
     // slide rels
-    entries.push({ name: `ppt/slides/_rels/slide${slideNum}.xml.rels`, data: buildSlideRels(slideNum, s.components.length) });
+    entries.push({ name: `ppt/slides/_rels/slide${slideNum}.xml.rels`, data: buildSlideRels(slideNum, s.components) });
 
     // media: background image
     entries.push({ name: `ppt/media/s${slideNum}_bg.png`, data: fs.readFileSync(s.bgFile) });
@@ -843,10 +1034,12 @@ async function exportComponents(options = {}) {
   const total = countSlides();
   if (!total) throw new Error('No slides found in 模板.html');
 
+  const exportMode = options.mode || process.env.COMPONENT_EXPORT_MODE || 'advanced';
+  const editableText = exportMode === 'editable';
   const chromeExe = findChrome();
   const chromeDebugPort = options.chromeDebugPort || await getFreePort();
   const baseUrl = options.baseUrl || `http://127.0.0.1:${PORT}`;
-  const outFile = options.outFile || OUT_FILE;
+  const outFile = options.outFile || (editableText ? EDITABLE_OUT_FILE : OUT_FILE);
   const shouldStartServer = !options.baseUrl;
   let server = null;
   let tempDir = null;
@@ -898,6 +1091,17 @@ async function exportComponents(options = {}) {
       }
 
       const components = data.components;
+      if (editableText) {
+        for (const comp of components) {
+          if (comp.kind === 'text' && comp.nativeText && comp.nativeText.eligible) {
+            comp.renderAs = 'nativeText';
+          } else if (comp.kind === 'text') {
+            comp.renderAs = 'pngText';
+          } else {
+            comp.renderAs = 'image';
+          }
+        }
+      }
       if (options.onProgress) {
         console.log(`Advanced export slide ${i}/${total}: ${components.length} component(s)`);
       } else {
@@ -949,7 +1153,9 @@ async function exportComponents(options = {}) {
       const compFiles = [];
       for (let ci = 0; ci < components.length; ci++) {
         const comp = components[ci];
-        const cf = path.join(tempDir, `s${i}_c${ci}.png`);
+        if (editableText && comp.renderAs === 'nativeText') continue;
+        comp.mediaIndex = compFiles.length;
+        const cf = path.join(tempDir, `s${i}_c${comp.mediaIndex}.png`);
         compFiles.push(cf);
         await captureComponent(cdp, sessionId, comp, cf);
       }
@@ -960,7 +1166,7 @@ async function exportComponents(options = {}) {
 
     if (options.onProgress) options.onProgress({ phase: 'write', total });
     else process.stdout.write('\nBuilding PPTX... ');
-    buildPptx(slides, outFile);
+    buildPptx(slides, outFile, { editableText });
     if (!options.onProgress) console.log(`\nDone: ${outFile} (${total} slides)`);
 
     if (options.onProgress) options.onProgress({ phase: 'done', total, outFile });

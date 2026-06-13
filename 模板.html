@@ -164,7 +164,7 @@ body:fullscreen .speaker-notes,body:-webkit-full-screen .speaker-notes{left:0}
 }
 .export-choice-backdrop.open{display:flex}
 .export-choice{
-  width:min(640px,calc(100vw - 40px));border:1px solid rgba(202,170,152,.34);
+  width:min(860px,calc(100vw - 40px));border:1px solid rgba(202,170,152,.34);
   background:linear-gradient(145deg,rgba(255,250,246,.97),rgba(238,226,218,.96));
   color:#1b2238;box-shadow:0 28px 80px rgba(15,18,32,.34);padding:18px;
 }
@@ -175,7 +175,7 @@ body:fullscreen .speaker-notes,body:-webkit-full-screen .speaker-notes{left:0}
   width:34px;height:34px;border:1px solid rgba(27,34,56,.18);background:rgba(255,255,255,.58);
   color:#1b2238;font-size:20px;line-height:1;cursor:pointer;
 }
-.export-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.export-choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .export-mode-card{
   position:relative;text-align:left;border:1px solid rgba(27,34,56,.16);background:rgba(255,255,255,.62);
   padding:15px 15px 14px;min-height:142px;cursor:pointer;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease,background .18s ease;
@@ -951,7 +951,7 @@ body.audience-mode .slide{
 <div class="export-choice-head">
 <div>
 <div class="export-choice-title" id="export-choice-title">选择导出方式</div>
-<div class="export-choice-sub">普通导出适合快速分享；高级导出会把背景、框层和透明文字层拆开，方便后续在 PPT 里移动和微调。</div>
+<div class="export-choice-sub">普通导出适合快速分享；高级导出拆分截图图层；可编辑文字导出会尽量把文字写成 PPT 原生文本框。</div>
 </div>
 <button aria-label="关闭导出选择" class="export-choice-close" id="export-choice-close" type="button">×</button>
 </div>
@@ -968,8 +968,14 @@ body.audience-mode .slide{
 <div class="export-mode-desc">拆分背景、框层、透明文字层和图片组件，适合后期单独移动文字或组件。</div>
 <span class="export-mode-meta">可选图层</span>
 </button>
+<button class="export-mode-card" data-export-mode="editable" type="button">
+<span class="export-mode-kicker">EDITABLE</span>
+<div class="export-mode-name">可编辑文字</div>
+<div class="export-mode-desc">常规文字转为 PPT 文本框，复杂文字自动保留透明 PNG，兼顾可改和稳定。</div>
+<span class="export-mode-meta">原生文本</span>
+</button>
 </div>
-<div class="export-choice-foot" id="export-choice-foot">高级导出需要通过控制端服务运行。</div>
+<div class="export-choice-foot" id="export-choice-foot">高级导出和可编辑文字导出需要通过控制端服务运行。</div>
 </section>
 </div>
 <aside aria-label="演讲者注释" class="speaker-notes" id="speaker-notes-panel">
@@ -1351,8 +1357,8 @@ body.audience-mode .slide{
     var params = new URLSearchParams(window.location.search);
     var token = params.get('token') || '';
     if(!token) throw new Error('控制端缺少 token，无法使用服务端导出');
-    var exportMode = mode === 'advanced' ? 'advanced' : 'normal';
-    setStatus(exportMode === 'advanced' ? '高级导出中…' : '普通导出中…');
+    var exportMode = mode === 'advanced' || mode === 'editable' ? mode : 'normal';
+    setStatus(exportMode === 'editable' ? '可编辑文字导出中…' : exportMode === 'advanced' ? '高级导出中…' : '普通导出中…');
     var res = await fetch('/api/export-pptx',{
       method:'POST',
       headers:{'Content-Type':'application/json','X-Control-Token':token},
@@ -1370,7 +1376,7 @@ body.audience-mode .slide{
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
     a.href = url;
-    a.download = exportMode === 'advanced' ? 'presentation_components.pptx' : 'presentation_exported_script.pptx';
+    a.download = exportMode === 'editable' ? 'presentation_editable_text.pptx' : exportMode === 'advanced' ? 'presentation_components.pptx' : 'presentation_exported_script.pptx';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -1390,15 +1396,15 @@ body.audience-mode .slide{
     choiceBackdrop.classList.add('open');
     choiceBackdrop.setAttribute('aria-hidden','false');
     modeButtons.forEach(function(button){
-      if(button.dataset.exportMode === 'advanced'){
+      if(button.dataset.exportMode === 'advanced' || button.dataset.exportMode === 'editable'){
         button.disabled = !serverReady;
-        button.title = serverReady ? '使用服务端组件分层导出' : '高级导出需要从控制端服务打开';
+        button.title = serverReady ? '使用服务端导出' : '该导出模式需要从控制端服务打开';
       }
     });
     if(choiceFoot){
       choiceFoot.textContent = serverReady
-        ? '当前为控制端：普通和高级导出都会由服务端生成并下载。'
-        : '当前为本地文件或非控制端：可用普通导出；高级导出需要启动控制端服务。';
+        ? '当前为控制端：三种导出都会由服务端生成并下载。'
+        : '当前为本地文件或非控制端：可用普通导出；高级和可编辑文字导出需要启动控制端服务。';
     }
   }
 
@@ -1413,10 +1419,10 @@ body.audience-mode .slide{
     if(btn.disabled) return;
     btn.disabled = true;
     var oldText = btn.textContent;
-    btn.textContent = mode === 'advanced' ? '高级导出中' : '导出中';
+    btn.textContent = mode === 'editable' ? '可编辑导出中' : mode === 'advanced' ? '高级导出中' : '导出中';
     try{
       if(shouldUseServerExport()) await exportToPPTXFromServer(mode);
-      else if(mode === 'advanced') throw new Error('高级导出需要通过控制端服务运行');
+      else if(mode === 'advanced' || mode === 'editable') throw new Error('该导出模式需要通过控制端服务运行');
       else await exportToPPTX();
     }catch(err){
       console.error(err);

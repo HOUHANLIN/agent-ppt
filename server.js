@@ -204,16 +204,20 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    const mode = body && body.mode === 'advanced' ? 'advanced' : 'normal';
-    const exporter = mode === 'advanced' ? exportComponents : exportPresentation;
-    const downloadName = mode === 'advanced'
-      ? 'presentation_components.pptx'
-      : 'presentation_exported_script.pptx';
+    const requestedMode = body && body.mode;
+    const mode = requestedMode === 'advanced' || requestedMode === 'editable' ? requestedMode : 'normal';
+    const exporter = mode === 'normal' ? exportPresentation : exportComponents;
+    const downloadName = mode === 'editable'
+      ? 'presentation_editable_text.pptx'
+      : mode === 'advanced'
+        ? 'presentation_components.pptx'
+        : 'presentation_exported_script.pptx';
 
     exportInProgress = true;
     const outFile = path.join(os.tmpdir(), `html-ppt-${mode}-export-${Date.now()}.pptx`);
     try {
       await exporter({
+        mode,
         baseUrl: `http://127.0.0.1:${port}`,
         outFile,
         onProgress(info) {
