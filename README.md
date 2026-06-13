@@ -56,11 +56,36 @@ http://localhost:3000/?role=audience
 维护幻灯片时，如果新增、删除或重排页面，请同步更新：
 
 - `speaker-notes.json`
-- `模板.html` 内的 `speaker-notes-data`
 - 每页 `.page-num`
 - 可见总页数和缩略图相关数据
 
+更新 `speaker-notes.json` 后运行：
+
+```bash
+npm run sync-notes
+```
+
+这个命令会把 `speaker-notes.json` 自动写入 `模板.html` 内的 `speaker-notes-data`。
+
 缺失的页码会显示“本页暂无演讲者注释”。
+
+## 常用命令
+
+```bash
+npm run serve
+npm run sync-notes
+npm test
+npm run export
+npm run export:components
+npm run export:editable
+```
+
+- `npm run serve`：用默认 `dev-token` 启动本地同步服务；也可以先设置 `CONTROL_TOKEN` 覆盖。
+- `npm run sync-notes`：从 `speaker-notes.json` 更新 HTML 内嵌演讲者注释。
+- `npm test`：运行无依赖回归检查。
+- `npm run export`：服务端普通整页导出。
+- `npm run export:components`：服务端高级组件框导出。
+- `npm run export:editable`：服务端可编辑文字导出。
 
 ## PPTX 导出
 
@@ -77,24 +102,35 @@ http://localhost:3000/?role=audience
 
 默认截图为 4K：固定 1280 x 720 HTML 画布乘以 `EXPORT_SCALE=3`，得到 3840 x 2160 输出。
 
+组件框导出优先读取 HTML 上的显式标记：
+
+- `data-export-component="split"`：布局容器，只递归拆分子元素，本身不作为组件。
+- `data-export-component="component"`：原子组件，按自身边界导出。
+- `data-export-component="text"`：强制按文字层导出。
+- `data-export-component="image"`：强制按图片组件导出。
+- `data-export-component="frame"`：强制按框层导出。
+- `data-export-component="ignore"`：导出时忽略该元素及其子树。
+
+旧 class 白名单仍保留作兼容 fallback，但新增模板组件时应优先写显式标记。
+
 ## 命令行导出
 
 普通整页导出：
 
 ```bash
-node export-pptx.js
+npm run export
 ```
 
 组件框导出：
 
 ```bash
-COMPONENT_EXPORT_MODE=advanced node export-components.js
+npm run export:components
 ```
 
 可编辑文字导出：
 
 ```bash
-COMPONENT_EXPORT_MODE=editable node export-components.js
+npm run export:editable
 ```
 
 可选环境变量：
@@ -122,8 +158,10 @@ COMPONENT_EXPORT_MODE=editable node export-components.js
 改动幻灯片后请检查：
 
 - 页面总数、`.page-num`、目录和缩略图标题一致。
-- `speaker-notes.json` 与 HTML 内嵌 `speaker-notes-data` 已同步。
+- 已运行 `npm run sync-notes`，并确认 `speaker-notes.json` 与 HTML 内嵌 `speaker-notes-data` 同步。
+- `npm test` 通过。
 - 本地打开 `模板.html` 时能看到演讲者注释。
 - 控制端和观众端仍能分别打开。
 - 导出弹窗仍显示四种模式，且非控制端只启用纯前端导出。
+- 新增组件已写 `data-export-component`，减少组件导出时的自动猜测。
 - 服务端普通、服务端高级和服务端可编辑文字导出仍能生成 PPTX。

@@ -13,7 +13,7 @@ Use this skill to build content decks inside this project by editing the existin
 2. Inspect `模板.html` before editing. Reuse its existing slide sections, CSS classes, controls, notes, sync, and export scripts.
 3. Read `references/template-syntax.md` when choosing layouts, writing slide HTML, adding images, or doing visual QA.
 4. Create a slide plan before editing: each slide gets one purpose, a chosen layout, a short title, and speaker-note intent.
-5. Edit only the slide content, `speaker-notes.json`, and the HTML embedded `speaker-notes-data` unless the user explicitly asks for template behavior changes.
+5. Edit only the slide content and `speaker-notes.json` unless the user explicitly asks for template behavior changes; run `npm run sync-notes` to update the HTML embedded `speaker-notes-data`.
 
 ## Deck Workflow
 
@@ -58,7 +58,7 @@ Use the template's existing layouts instead of inventing new structures:
 ### 4. Maintain speaker notes
 
 - Update `speaker-notes.json` after slide changes.
-- Update the matching embedded JSON in `<script id="speaker-notes-data" type="application/json">` inside `模板.html`; local `file://` presentation mode reads this embedded copy.
+- Run `npm run sync-notes` after editing notes; local `file://` presentation mode reads the generated embedded copy in `模板.html`.
 - Use 1-based string keys: `"1"`, `"2"`, `"3"`.
 - Notes should tell the speaker what to say, not repeat slide text verbatim.
 - If a slide is a figure, note the intended reading order.
@@ -70,6 +70,7 @@ Use the template's existing layouts instead of inventing new structures:
 - Pure frontend export must work without `server.js`; it uses the bundled `lib/html2canvas.min.js` and `lib/pptxgen.bundle.js`.
 - The three server modes require the control URL with `role=control` and a `token`.
 - Default screenshot output is 4K: a 1280 x 720 canvas at scale 3.
+- Mark export structure explicitly in slide HTML: use `data-export-component="split"` on layout containers and `data-export-component="component"` on atomic visual blocks. Use `text`, `image`, `frame`, or `ignore` only when the default component behavior would be wrong.
 - Editable-text export relies on PPT text boxes with wrapping enabled; avoid template changes that force ordinary paragraph text into non-wrapping boxes.
 
 ## Visual QA Is Mandatory
@@ -99,7 +100,8 @@ For image slides:
 Before reporting completion:
 
 - Confirm slide count and page numbers match.
-- Confirm `speaker-notes.json` and embedded `speaker-notes-data` keys cover the final slide count or intentionally omit only slides with no notes.
+- Run `npm run sync-notes`, then confirm `npm test` passes.
+- Confirm `speaker-notes.json` keys cover the final slide count or intentionally omit only slides with no notes.
 - Confirm control/audience/export scripts were not accidentally removed.
 - Confirm the deck opens directly as `模板.html` for local presenter mode and through `server.js` for control/audience mode when notes or export behavior matters.
 - Confirm the export chooser still exposes four modes and correctly disables server modes outside the tokenized control page.

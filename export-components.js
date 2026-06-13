@@ -260,6 +260,9 @@ async function getSlideComponents(cdp, sessionId, url) {
           var c = el.className || "";
           return layoutClasses.some(function(k) { return c.split(/\s+/).indexOf(k) >= 0; });
         }
+        function explicitComponentMode(el) {
+          return ((el.dataset && el.dataset.exportComponent) || "").trim().toLowerCase();
+        }
         function hasClass(el, list) {
           var c = el.className || "";
           return list.some(function(k) { return c.split(/\s+/).indexOf(k) >= 0; });
@@ -274,6 +277,10 @@ async function getSlideComponents(cdp, sessionId, url) {
             || border > 0 || (cs.boxShadow && cs.boxShadow !== "none"));
         }
         function shouldSplit(el) {
+          var mode = explicitComponentMode(el);
+          if (mode === "ignore") return false;
+          if (mode === "split") return true;
+          if (mode === "component" || mode === "atomic" || mode === "text" || mode === "image" || mode === "frame") return false;
           if (el.tagName === "TABLE") return false;
           if (hasClass(el, atomicClasses)) return false;
           if (isLayout(el)) return true;
@@ -281,6 +288,7 @@ async function getSlideComponents(cdp, sessionId, url) {
           return false;
         }
         function isImageLike(el) {
+          if (explicitComponentMode(el) === "image") return true;
           if (["IMG", "SVG", "CANVAS", "VIDEO"].indexOf(el.tagName) >= 0) return true;
           return hasClass(el, ["fig", "imgbox"]);
         }
@@ -405,6 +413,20 @@ async function getSlideComponents(cdp, sessionId, url) {
         }
         function addComponent(el) {
           var seq = componentSeq++;
+          var explicitMode = explicitComponentMode(el);
+          var explicitCapture = el.dataset && el.dataset.exportCapture;
+          if (explicitMode === "text") {
+            pushItem(el, "text", explicitCapture || "text", 2, seq);
+            return;
+          }
+          if (explicitMode === "image") {
+            pushItem(el, "image", explicitCapture || "normal", 1, seq);
+            return;
+          }
+          if (explicitMode === "frame") {
+            pushItem(el, "frame", explicitCapture || "normal", 0, seq);
+            return;
+          }
           var text = hasText(el);
           var visibleBox = hasVisibleBox(el);
           if (el.tagName === "TABLE") {
@@ -426,7 +448,9 @@ async function getSlideComponents(cdp, sessionId, url) {
         function collect(el) {
           var r = el.getBoundingClientRect();
           if (r.width <= 2 || r.height <= 2) return;
-          if (shouldSplit(el)) {
+          var explicitMode = explicitComponentMode(el);
+          if (explicitMode === "ignore") return;
+          if (explicitMode === "split" || shouldSplit(el)) {
             Array.from(el.children).forEach(collect);
           } else {
             addComponent(el);

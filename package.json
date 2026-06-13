@@ -1,0 +1,15 @@
+{
+  "name": "agent-ppt",
+  "version": "0.1.0",
+  "private": true,
+  "description": "HTML PPT template with presenter notes, sync mode, and PPTX export.",
+  "scripts": {
+    "serve": "CONTROL_TOKEN=${CONTROL_TOKEN:-dev-token} node server.js",
+    "sync-notes": "node scripts/sync-speaker-notes.js",
+    "check": "node scripts/check.js",
+    "test": "node scripts/check.js",
+    "export": "node export-pptx.js",
+    "export:components": "COMPONENT_EXPORT_MODE=advanced node export-components.js",
+    "export:editable": "COMPONENT_EXPORT_MODE=editable node export-components.js"
+  }
+}

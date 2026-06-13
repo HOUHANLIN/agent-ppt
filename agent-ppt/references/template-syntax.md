@@ -44,6 +44,8 @@ When changing slide count or order, keep both stores in sync and use 1-based str
 }
 ```
 
+After editing `speaker-notes.json`, run `npm run sync-notes` instead of manually editing the embedded JSON.
+
 Local presenter mode and service control mode both use the reserved bottom speaker-notes layout, so slide content must remain readable above the notes drawer.
 
 ## Common Components
@@ -58,12 +60,25 @@ Local presenter mode and service control mode both use the reserved bottom speak
 - Structure: `.pyramid`, `.tree`, `.dualpath`, `.finalmodel`.
 - Special layouts: `.kpi-row`, `.timeline`, `.matrix`, `.pesc`, `.case-card`, `.swot`, `.qa`, `.ref-list`, `.annotation-demo`.
 
+## Export Component Markers
+
+Server advanced export and editable-text export prefer explicit `data-export-component` markers over class-name guessing:
+
+- `split`: layout container; recurse into children and do not export the container itself.
+- `component`: atomic visual block; export using normal frame/text/image heuristics.
+- `text`: force a text layer.
+- `image`: force an image layer.
+- `frame`: force a frame layer.
+- `ignore`: ignore this element and its children.
+
+When adding a new layout, mark outer grouping elements as `split` and cards, figures, callouts, KPI blocks, panels, and other movable units as `component`.
+
 ## Image Pattern
 
 Prefer this pattern for real images:
 
 ```html
-<div class="fig fig--xl has-image" data-caption="图注：说明图片来源或读图重点">
+<div class="fig fig--xl has-image" data-caption="图注：说明图片来源或读图重点" data-export-component="component">
   <img class="figure-img" src="image-name.png" alt="简短图片说明" />
 </div>
 ```
@@ -133,6 +148,7 @@ Inspect changed slides after editing:
 - The export chooser still has four modes: pure frontend export plus three server exports.
 - The server export modes are only enabled on `?role=control&token=...`.
 - The default screenshot output remains 4K through scale 3.
+- `npm test` passes after content, notes, or export-related changes.
 
 If visual QA fails, prefer one of these fixes:
 
