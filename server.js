@@ -4,6 +4,7 @@ const os = require('os');
 const path = require('path');
 const { URL } = require('url');
 const { exportPresentation } = require('./export-pptx');
+const { exportComponents } = require('./export-components');
 
 const rootDir = __dirname;
 const port = Number(process.env.PORT || 3000);
@@ -203,24 +204,32 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    const mode = body && body.mode === 'advanced' ? 'advanced' : 'normal';
+    const exporter = mode === 'advanced' ? exportComponents : exportPresentation;
+    const downloadName = mode === 'advanced'
+      ? 'presentation_components.pptx'
+      : 'presentation_exported_script.pptx';
+
     exportInProgress = true;
-    const outFile = path.join(os.tmpdir(), `html-ppt-export-${Date.now()}.pptx`);
+    const outFile = path.join(os.tmpdir(), `html-ppt-${mode}-export-${Date.now()}.pptx`);
     try {
-      await exportPresentation({
+      await exporter({
         baseUrl: `http://127.0.0.1:${port}`,
         outFile,
         onProgress(info) {
           if (info.phase === 'render') {
-            console.log(`Export rendering ${info.current}/${info.total}`);
+            console.log(`${mode} export rendering ${info.current}/${info.total}`);
+          } else if (info.phase === 'components') {
+            console.log(`${mode} export components ${info.current}/${info.total}`);
           } else if (info.phase === 'write') {
-            console.log('Export writing PPTX');
+            console.log(`${mode} export writing PPTX`);
           }
         }
       });
       const file = fs.readFileSync(outFile);
       res.writeHead(200, {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-        'Content-Disposition': 'attachment; filename="presentation_exported_script.pptx"',
+        'Content-Disposition': `attachment; filename="${downloadName}"`,
         'Content-Length': file.length,
         'Cache-Control': 'no-store'
       });

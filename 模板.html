@@ -158,9 +158,43 @@ body:fullscreen .speaker-notes,body:-webkit-full-screen .speaker-notes{left:0}
 /* PPTX export button/status */
 .export-btn{min-width:76px;font-weight:700}
 #export-status{color:rgba(255,250,246,.75);font-size:11px;min-width:80px;text-align:left}
+.export-choice-backdrop{
+  position:fixed;inset:0;z-index:10020;display:none;align-items:center;justify-content:center;
+  padding:24px;background:rgba(16,18,28,.48);backdrop-filter:blur(10px);
+}
+.export-choice-backdrop.open{display:flex}
+.export-choice{
+  width:min(640px,calc(100vw - 40px));border:1px solid rgba(202,170,152,.34);
+  background:linear-gradient(145deg,rgba(255,250,246,.97),rgba(238,226,218,.96));
+  color:#1b2238;box-shadow:0 28px 80px rgba(15,18,32,.34);padding:18px;
+}
+.export-choice-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}
+.export-choice-title{font-family:Georgia,'Times New Roman',serif;font-weight:800;font-size:22px;letter-spacing:0}
+.export-choice-sub{margin-top:4px;color:rgba(27,34,56,.68);font-size:13px;line-height:1.45}
+.export-choice-close{
+  width:34px;height:34px;border:1px solid rgba(27,34,56,.18);background:rgba(255,255,255,.58);
+  color:#1b2238;font-size:20px;line-height:1;cursor:pointer;
+}
+.export-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.export-mode-card{
+  position:relative;text-align:left;border:1px solid rgba(27,34,56,.16);background:rgba(255,255,255,.62);
+  padding:15px 15px 14px;min-height:142px;cursor:pointer;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease,background .18s ease;
+}
+.export-mode-card:hover{transform:translateY(-2px);border-color:rgba(27,34,56,.34);box-shadow:0 12px 28px rgba(27,34,56,.12);background:rgba(255,255,255,.82)}
+.export-mode-card[disabled]{cursor:not-allowed;opacity:.52;transform:none;box-shadow:none}
+.export-mode-kicker{display:inline-flex;align-items:center;height:22px;padding:0 8px;border:1px solid rgba(27,34,56,.14);font-size:11px;font-weight:800;color:#5b473d;background:rgba(202,170,152,.15)}
+.export-mode-name{margin-top:12px;font-size:18px;font-weight:900;color:#172039}
+.export-mode-desc{margin-top:7px;font-size:12px;line-height:1.5;color:rgba(27,34,56,.7)}
+.export-mode-meta{position:absolute;right:12px;bottom:10px;font-size:11px;font-weight:800;color:rgba(27,34,56,.42)}
+.export-choice-foot{margin-top:12px;font-size:11px;color:rgba(27,34,56,.56)}
+@media (max-width:720px){
+  .export-choice{padding:14px}
+  .export-choice-grid{grid-template-columns:1fr}
+  .export-mode-card{min-height:118px}
+}
 .export-hidden-stage{position:fixed;left:-99999px;top:0;width:1280px;height:720px;overflow:hidden;background:transparent;z-index:-1;pointer-events:none}
 .export-hidden-stage .slide{display:block!important;position:relative!important;left:auto!important;top:auto!important;transform:none!important;width:1280px!important;height:720px!important;min-width:1280px!important;min-height:720px!important;max-width:none!important;max-height:none!important;margin:0!important;box-shadow:none!important}
-@media print{.export-btn,#export-status{display:none!important}}
+@media print{.export-btn,#export-status,.export-choice-backdrop{display:none!important}}
 
 @media print{
   .slide{display:block!important;position:static;transform:none;width:16in;height:9in;max-width:none;max-height:none;page-break-after:always}
@@ -912,6 +946,32 @@ body.audience-mode .slide{
 <button class="nav-btn export-btn" id="btn-export-pptx" title="将每页以高清截图写入 PPTX，保持 16:9 比例">导出PPTX</button>
 <span aria-live="polite" id="export-status"></span>
 </div>
+<div aria-hidden="true" class="export-choice-backdrop" id="export-choice-backdrop">
+<section aria-labelledby="export-choice-title" class="export-choice" role="dialog">
+<div class="export-choice-head">
+<div>
+<div class="export-choice-title" id="export-choice-title">选择导出方式</div>
+<div class="export-choice-sub">普通导出适合快速分享；高级导出会把背景、框层和透明文字层拆开，方便后续在 PPT 里移动和微调。</div>
+</div>
+<button aria-label="关闭导出选择" class="export-choice-close" id="export-choice-close" type="button">×</button>
+</div>
+<div class="export-choice-grid">
+<button class="export-mode-card" data-export-mode="normal" type="button">
+<span class="export-mode-kicker">FAST</span>
+<div class="export-mode-name">普通导出</div>
+<div class="export-mode-desc">每页作为一张完整高清图片写入 PPTX，文件结构简单，视觉最稳定。</div>
+<span class="export-mode-meta">整页图片</span>
+</button>
+<button class="export-mode-card" data-export-mode="advanced" type="button">
+<span class="export-mode-kicker">LAYERED</span>
+<div class="export-mode-name">高级导出</div>
+<div class="export-mode-desc">拆分背景、框层、透明文字层和图片组件，适合后期单独移动文字或组件。</div>
+<span class="export-mode-meta">可选图层</span>
+</button>
+</div>
+<div class="export-choice-foot" id="export-choice-foot">高级导出需要通过控制端服务运行。</div>
+</section>
+</div>
 <aside aria-label="演讲者注释" class="speaker-notes" id="speaker-notes-panel">
 <div class="speaker-notes-header">
 <span class="speaker-notes-title">演讲者注释</span>
@@ -1187,6 +1247,10 @@ body.audience-mode .slide{
   var EXPORT_SCALE = 2.5; // 3200×1800 screenshots: clear text/figures without huge files.
   var btn = document.getElementById('btn-export-pptx');
   var status = document.getElementById('export-status');
+  var choiceBackdrop = document.getElementById('export-choice-backdrop');
+  var choiceClose = document.getElementById('export-choice-close');
+  var choiceFoot = document.getElementById('export-choice-foot');
+  var modeButtons = choiceBackdrop ? Array.prototype.slice.call(choiceBackdrop.querySelectorAll('[data-export-mode]')) : [];
 
   function setStatus(text){ if(status) status.textContent = text || ''; }
 
@@ -1283,15 +1347,16 @@ body.audience-mode .slide{
     setTimeout(function(){ setStatus(''); }, 3000);
   }
 
-  async function exportToPPTXFromServer(){
+  async function exportToPPTXFromServer(mode){
     var params = new URLSearchParams(window.location.search);
     var token = params.get('token') || '';
     if(!token) throw new Error('控制端缺少 token，无法使用服务端导出');
-    setStatus('服务端导出中…');
+    var exportMode = mode === 'advanced' ? 'advanced' : 'normal';
+    setStatus(exportMode === 'advanced' ? '高级导出中…' : '普通导出中…');
     var res = await fetch('/api/export-pptx',{
       method:'POST',
       headers:{'Content-Type':'application/json','X-Control-Token':token},
-      body:JSON.stringify({token:token})
+      body:JSON.stringify({token:token,mode:exportMode})
     });
     if(!res.ok){
       var msg='服务端导出失败';
@@ -1305,7 +1370,7 @@ body.audience-mode .slide{
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
     a.href = url;
-    a.download = 'presentation_exported_script.pptx';
+    a.download = exportMode === 'advanced' ? 'presentation_components.pptx' : 'presentation_exported_script.pptx';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -1319,27 +1384,75 @@ body.audience-mode .slide{
     return (location.protocol==='http:' || location.protocol==='https:') && params.get('role')==='control';
   }
 
-  window.exportToPPTX = exportToPPTX;
-  if(btn){
-    btn.addEventListener('click', async function(e){
-      e.stopPropagation();
-      if(btn.disabled) return;
-      btn.disabled = true;
-      var oldText = btn.textContent;
-      btn.textContent = '导出中';
-      try{
-        if(shouldUseServerExport()) await exportToPPTXFromServer();
-        else await exportToPPTX();
-      }catch(err){
-        console.error(err);
-        setStatus('导出失败');
-        alert('导出 PPTX 失败：' + (err && err.message ? err.message : err));
-      }finally{
-        btn.disabled = false;
-        btn.textContent = oldText;
+  function openExportChoice(){
+    if(!choiceBackdrop) return;
+    var serverReady = shouldUseServerExport();
+    choiceBackdrop.classList.add('open');
+    choiceBackdrop.setAttribute('aria-hidden','false');
+    modeButtons.forEach(function(button){
+      if(button.dataset.exportMode === 'advanced'){
+        button.disabled = !serverReady;
+        button.title = serverReady ? '使用服务端组件分层导出' : '高级导出需要从控制端服务打开';
       }
     });
+    if(choiceFoot){
+      choiceFoot.textContent = serverReady
+        ? '当前为控制端：普通和高级导出都会由服务端生成并下载。'
+        : '当前为本地文件或非控制端：可用普通导出；高级导出需要启动控制端服务。';
+    }
   }
+
+  function closeExportChoice(){
+    if(!choiceBackdrop) return;
+    choiceBackdrop.classList.remove('open');
+    choiceBackdrop.setAttribute('aria-hidden','true');
+  }
+
+  async function runExportMode(mode){
+    closeExportChoice();
+    if(btn.disabled) return;
+    btn.disabled = true;
+    var oldText = btn.textContent;
+    btn.textContent = mode === 'advanced' ? '高级导出中' : '导出中';
+    try{
+      if(shouldUseServerExport()) await exportToPPTXFromServer(mode);
+      else if(mode === 'advanced') throw new Error('高级导出需要通过控制端服务运行');
+      else await exportToPPTX();
+    }catch(err){
+      console.error(err);
+      setStatus('导出失败');
+      alert('导出 PPTX 失败：' + (err && err.message ? err.message : err));
+    }finally{
+      btn.disabled = false;
+      btn.textContent = oldText;
+    }
+  }
+
+  window.exportToPPTX = exportToPPTX;
+  window.exportToPPTXFromServer = exportToPPTXFromServer;
+  if(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      if(btn.disabled) return;
+      openExportChoice();
+    });
+  }
+  if(choiceClose) choiceClose.addEventListener('click', closeExportChoice);
+  if(choiceBackdrop){
+    choiceBackdrop.addEventListener('click', function(e){
+      if(e.target === choiceBackdrop) closeExportChoice();
+    });
+  }
+  modeButtons.forEach(function(button){
+    button.addEventListener('click', function(e){
+      e.stopPropagation();
+      if(button.disabled) return;
+      runExportMode(button.dataset.exportMode);
+    });
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeExportChoice();
+  });
 })();
 </script>
 <script id="fixed-canvas-scaler">
