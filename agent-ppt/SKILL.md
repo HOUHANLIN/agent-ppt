@@ -1,6 +1,6 @@
 ---
 name: agent-ppt
-description: Create or revise slide decks using this project's HTML PPT template. Use when Codex needs to turn a user outline, source content, paper notes, lesson plan, report, speech draft, or topic into `模板.html` slides; choose template layouts, write slide HTML, maintain `speaker-notes.json`, and perform visual QA for overlap, overflow, image sizing, readability, and PPTX export compatibility.
+description: Create or revise slide decks using this project's HTML PPT template. Use when Codex needs to turn a user outline, source content, paper notes, lesson plan, report, speech draft, or topic into `模板.html` slides; choose template layouts, write slide HTML, maintain speaker notes in both `speaker-notes.json` and the HTML embedded `speaker-notes-data`, and perform visual QA for overlap, overflow, image sizing, presenter-note layout, and PPTX export compatibility.
 ---
 
 # Agent PPT
@@ -13,7 +13,7 @@ Use this skill to build content decks inside this project by editing the existin
 2. Inspect `模板.html` before editing. Reuse its existing slide sections, CSS classes, controls, notes, sync, and export scripts.
 3. Read `references/template-syntax.md` when choosing layouts, writing slide HTML, adding images, or doing visual QA.
 4. Create a slide plan before editing: each slide gets one purpose, a chosen layout, a short title, and speaker-note intent.
-5. Edit only the slide content and `speaker-notes.json` unless the user explicitly asks for template behavior changes.
+5. Edit only the slide content, `speaker-notes.json`, and the HTML embedded `speaker-notes-data` unless the user explicitly asks for template behavior changes.
 
 ## Deck Workflow
 
@@ -23,7 +23,7 @@ Use this skill to build content decks inside this project by editing the existin
 - Use cover, table of contents, and section divider slides when the deck has multiple sections.
 - Prefer 8-15 slides for ordinary outlines unless the user requests a different length.
 - Convert dense paragraphs into short claims, evidence, examples, and takeaways.
-- Keep detail in `speaker-notes.json`; keep slides visually scannable.
+- Keep detail in speaker notes; keep slides visually scannable.
 
 ### 2. Choose layouts by content type
 
@@ -49,7 +49,7 @@ Use the template's existing layouts instead of inventing new structures:
 
 ### 3. Write HTML in the template style
 
-- Preserve `.slide-area`, navigation controls, presenter notes drawer, sync scripts, and export scripts.
+- Preserve `.slide-area`, navigation controls, presenter notes drawer, sync scripts, scaler scripts, and export scripts.
 - Each page must be a `<section class="slide ...">` with `data-title`, `data-section`, `.page-num`, and appropriate inner template structure.
 - Keep `.layout-note` for template guidance unless the user asks for a clean audience deck without layout notes.
 - Update every `.page-num` and the visible total after adding/removing slides.
@@ -58,10 +58,19 @@ Use the template's existing layouts instead of inventing new structures:
 ### 4. Maintain speaker notes
 
 - Update `speaker-notes.json` after slide changes.
+- Update the matching embedded JSON in `<script id="speaker-notes-data" type="application/json">` inside `模板.html`; local `file://` presentation mode reads this embedded copy.
 - Use 1-based string keys: `"1"`, `"2"`, `"3"`.
 - Notes should tell the speaker what to say, not repeat slide text verbatim.
 - If a slide is a figure, note the intended reading order.
 - If a slide is dense by necessity, move extra explanation into notes.
+
+### 5. Preserve export behavior
+
+- The export chooser has four modes: pure frontend export, server normal export, server advanced component export, and server editable-text export.
+- Pure frontend export must work without `server.js`; it uses the bundled `lib/html2canvas.min.js` and `lib/pptxgen.bundle.js`.
+- The three server modes require the control URL with `role=control` and a `token`.
+- Default screenshot output is 4K: a 1280 x 720 canvas at scale 3.
+- Editable-text export relies on PPT text boxes with wrapping enabled; avoid template changes that force ordinary paragraph text into non-wrapping boxes.
 
 ## Visual QA Is Mandatory
 
@@ -90,7 +99,8 @@ For image slides:
 Before reporting completion:
 
 - Confirm slide count and page numbers match.
-- Confirm `speaker-notes.json` keys cover the final slide count or intentionally omit only slides with no notes.
+- Confirm `speaker-notes.json` and embedded `speaker-notes-data` keys cover the final slide count or intentionally omit only slides with no notes.
 - Confirm control/audience/export scripts were not accidentally removed.
-- Confirm the deck opens locally through `server.js` when notes or export behavior matters.
+- Confirm the deck opens directly as `模板.html` for local presenter mode and through `server.js` for control/audience mode when notes or export behavior matters.
+- Confirm the export chooser still exposes four modes and correctly disables server modes outside the tokenized control page.
 - Mention any visual QA that could not be performed.

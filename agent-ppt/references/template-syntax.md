@@ -28,6 +28,24 @@ Keep:
 
 Do not remove or rewrite the navigation, presenter-notes, sync, export, or scaler scripts while only creating slide content.
 
+## Speaker Notes
+
+Speaker notes are stored in two places:
+
+- `speaker-notes.json`: used by the token-protected service control page.
+- `<script id="speaker-notes-data" type="application/json">` in `模板.html`: used when `模板.html` is opened directly through `file://` or as a non-control local page.
+
+When changing slide count or order, keep both stores in sync and use 1-based string keys:
+
+```json
+{
+  "1": "What the speaker should say on slide 1.",
+  "2": "What the speaker should say on slide 2."
+}
+```
+
+Local presenter mode and service control mode both use the reserved bottom speaker-notes layout, so slide content must remain readable above the notes drawer.
+
 ## Common Components
 
 - Text lists: `.bullets`, `.smallbullets`.
@@ -111,7 +129,10 @@ Inspect changed slides after editing:
 - Images are not stretched and remain large enough to understand.
 - The main claim is visible within three seconds.
 - If presenter notes are active, the slide area remains readable above the notes drawer.
-- Export mode still works because each slide remains a fixed 1280 x 720 `.slide`.
+- Export modes still work because each slide remains a fixed 1280 x 720 `.slide`.
+- The export chooser still has four modes: pure frontend export plus three server exports.
+- The server export modes are only enabled on `?role=control&token=...`.
+- The default screenshot output remains 4K through scale 3.
 
 If visual QA fails, prefer one of these fixes:
 
@@ -120,3 +141,11 @@ If visual QA fails, prefer one of these fixes:
 - Switch to a roomier layout.
 - Increase figure size and move explanation into notes.
 - Replace a dense table with cards, a matrix, or a summary plus notes.
+
+## Export Compatibility
+
+- Pure frontend export runs in the browser and uses the bundled `html2canvas` and `pptxgen` libraries.
+- Service normal export uses `export-pptx.js` and writes each slide as a full-slide PNG.
+- Service advanced export uses `export-components.js` with `COMPONENT_EXPORT_MODE=advanced` and writes component screenshots.
+- Service editable-text export uses `export-components.js` with `COMPONENT_EXPORT_MODE=editable` and writes eligible text as native PPT text boxes.
+- Ordinary text should be allowed to wrap. Avoid CSS or generated markup that marks normal paragraphs as `white-space: nowrap` unless clipping is intentional.

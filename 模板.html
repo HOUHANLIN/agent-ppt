@@ -175,7 +175,7 @@ body:fullscreen .speaker-notes,body:-webkit-full-screen .speaker-notes{left:0}
   width:34px;height:34px;border:1px solid rgba(27,34,56,.18);background:rgba(255,255,255,.58);
   color:#1b2238;font-size:20px;line-height:1;cursor:pointer;
 }
-.export-choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.export-choice-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .export-mode-card{
   position:relative;text-align:left;border:1px solid rgba(27,34,56,.16);background:rgba(255,255,255,.62);
   padding:15px 15px 14px;min-height:142px;cursor:pointer;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease,background .18s ease;
@@ -191,6 +191,9 @@ body:fullscreen .speaker-notes,body:-webkit-full-screen .speaker-notes{left:0}
   .export-choice{padding:14px}
   .export-choice-grid{grid-template-columns:1fr}
   .export-mode-card{min-height:118px}
+}
+@media (min-width:721px) and (max-width:1040px){
+  .export-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 .export-hidden-stage{position:fixed;left:-99999px;top:0;width:1280px;height:720px;overflow:hidden;background:transparent;z-index:-1;pointer-events:none}
 .export-hidden-stage .slide{display:block!important;position:relative!important;left:auto!important;top:auto!important;transform:none!important;width:1280px!important;height:720px!important;min-width:1280px!important;min-height:720px!important;max-width:none!important;max-height:none!important;margin:0!important;box-shadow:none!important}
@@ -951,31 +954,37 @@ body.audience-mode .slide{
 <div class="export-choice-head">
 <div>
 <div class="export-choice-title" id="export-choice-title">选择导出方式</div>
-<div class="export-choice-sub">普通导出适合快速分享；高级导出拆分截图图层；可编辑文字导出会尽量把文字写成 PPT 原生文本框。</div>
+<div class="export-choice-sub">服务端导出需要通过控制端启动；纯前端导出可在本地文件模式下直接生成整页图片 PPTX。</div>
 </div>
 <button aria-label="关闭导出选择" class="export-choice-close" id="export-choice-close" type="button">×</button>
 </div>
 <div class="export-choice-grid">
+<button class="export-mode-card" data-export-mode="client" type="button">
+<span class="export-mode-kicker">LOCAL</span>
+<div class="export-mode-name">纯前端导出</div>
+<div class="export-mode-desc">直接在浏览器里把每页截图写入 PPTX，不调用本地服务，适合离线快速导出。</div>
+<span class="export-mode-meta">本地整页</span>
+</button>
 <button class="export-mode-card" data-export-mode="normal" type="button">
-<span class="export-mode-kicker">FAST</span>
-<div class="export-mode-name">普通导出</div>
-<div class="export-mode-desc">每页作为一张完整高清图片写入 PPTX，文件结构简单，视觉最稳定。</div>
-<span class="export-mode-meta">整页图片</span>
+<span class="export-mode-kicker">SERVER</span>
+<div class="export-mode-name">服务端普通</div>
+<div class="export-mode-desc">由本地服务调用 Chrome 渲染，每页作为一张高清图片写入 PPTX，视觉最稳定。</div>
+<span class="export-mode-meta">服务端整页</span>
 </button>
 <button class="export-mode-card" data-export-mode="advanced" type="button">
-<span class="export-mode-kicker">LAYERED</span>
-<div class="export-mode-name">高级导出</div>
+<span class="export-mode-kicker">SERVER</span>
+<div class="export-mode-name">服务端高级</div>
 <div class="export-mode-desc">拆分背景、框层、透明文字层和图片组件，适合后期单独移动文字或组件。</div>
-<span class="export-mode-meta">可选图层</span>
+<span class="export-mode-meta">服务端图层</span>
 </button>
 <button class="export-mode-card" data-export-mode="editable" type="button">
-<span class="export-mode-kicker">EDITABLE</span>
-<div class="export-mode-name">可编辑文字</div>
+<span class="export-mode-kicker">SERVER</span>
+<div class="export-mode-name">服务端可编辑文字</div>
 <div class="export-mode-desc">常规文字转为 PPT 文本框，复杂文字自动保留透明 PNG，兼顾可改和稳定。</div>
-<span class="export-mode-meta">原生文本</span>
+<span class="export-mode-meta">服务端文本</span>
 </button>
 </div>
-<div class="export-choice-foot" id="export-choice-foot">高级导出和可编辑文字导出需要通过控制端服务运行。</div>
+<div class="export-choice-foot" id="export-choice-foot">前三种服务端导出需要通过控制端服务运行；纯前端导出可直接使用。</div>
 </section>
 </div>
 <aside aria-label="演讲者注释" class="speaker-notes" id="speaker-notes-panel">
@@ -990,6 +999,32 @@ body.audience-mode .slide{
 </div>
 </aside>
 <div id="progress-bar" style="width:4.1667%"></div>
+<script id="speaker-notes-data" type="application/json">{
+  "1": "开场时简要介绍主题、汇报人和日期。提醒自己控制节奏，不要在封面停留太久。",
+  "2": "用 20 秒说明整体结构，让观众知道接下来会按哪些部分展开。",
+  "3": "章节分隔页用于转换节奏。先抛出本章节要回答的核心问题。",
+  "4": "先读出主张，再解释 3 个支撑要点。避免逐字念页面上的项目符号。",
+  "5": "讲图时按“整体结论、关键区域、证据解释”的顺序推进。",
+  "6": "四卡片页适合快速归纳。强调卡片之间的并列关系和共同主题。",
+  "7": "流程页要沿箭头讲，不要跳步。每一步只补充一句关键原因。",
+  "8": "对比页先说明比较维度，再分别讲左右两侧差异。",
+  "9": "表格页不要逐格朗读。只指出最重要的 2 到 3 个差异。",
+  "10": "层级结构页从底层铺垫讲到顶层结论，最后回到核心判断。",
+  "11": "树状分类页先讲根节点，再说明每个分支为何独立。",
+  "12": "双路径页要保持左右节奏一致，最后强调两条路径如何汇合。",
+  "13": "实验设计页重点讲设计逻辑和先后顺序，不展开过多技术细节。",
+  "14": "大图页先给观众 3 秒看图，再从局部说明引导视线。",
+  "15": "结论页适合收束。每条结论只补一句证据或意义。",
+  "16": "数据指标页先说数字代表什么，再解释为什么重要。",
+  "17": "时间线页按时间推进，强调关键节点的变化或转折。",
+  "18": "矩阵页先解释横纵轴，再指出最值得关注的格子。",
+  "19": "论证闭环页按问题、证据、结论顺序讲，避免先泄露太多细节。",
+  "20": "病例信息页先建立背景，再进入后续判断。注意隐私信息脱敏。",
+  "21": "SWOT 页先讲内部因素，再讲外部因素，最后引出策略选择。",
+  "22": "Q&A 页作为备用页。正式演讲可快速带过，答辩时再展开。",
+  "23": "参考文献页说明来源可靠即可，不需要逐条朗读。",
+  "24": "标注讲图页按标注 1、2、3 的顺序讲，最后回到本页结论。"
+}</script>
 <script>
 (function(){
   var slides=document.querySelectorAll('.slide');
@@ -1014,15 +1049,18 @@ body.audience-mode .slide{
   var isExportMode=exportSlideParam!==null;
   var isControl=role==='control';
   var isAudience=role==='audience';
+  var isHttpMode=location.protocol==='http:' || location.protocol==='https:';
+  var isServerControl=isHttpMode && isControl;
+  var isPresenterMode=!isAudience && !isExportMode;
   var lastBroadcastPage=null;
   var speakerNotes={};
-  var notesLoadState=isControl?'loading':'idle';
+  var notesLoadState=isPresenterMode?'loading':'idle';
 
   if(isExportMode){
     document.body.classList.add('export-mode');
   }
 
-  if(isControl){
+  if(isPresenterMode){
     document.body.classList.add('controller-notes-active');
   }
 
@@ -1048,13 +1086,13 @@ body.audience-mode .slide{
   }
 
   function updateSpeakerNotes(){
-    if(!isControl || !notesPanel) return;
+    if(!isPresenterMode || !notesPanel) return;
     var pageKey=String(current+1);
     var title=getSlideTitle(current);
     var nextTitle=current+1<total?getSlideTitle(current+1):'已经是最后一页';
     var note=speakerNotes[pageKey];
     if(typeof note!=='string' || !note.trim()){
-      note=notesLoadState==='error'?'注释文件未加载。请确认 speaker-notes.json 位于模板同目录，且通过 node server.js 访问。':'本页暂无演讲者注释';
+      note=notesLoadState==='error'?'注释文件未加载。服务模式请确认 speaker-notes.json 位于模板同目录；本地文件模式请确认 HTML 内已包含 speaker-notes-data。':'本页暂无演讲者注释';
     }
     if(notesMeta) notesMeta.textContent=(current+1)+'/'+total+' ｜ '+title;
     if(notesText) notesText.textContent=note;
@@ -1065,8 +1103,21 @@ body.audience-mode .slide{
   }
 
   function loadSpeakerNotes(){
-    if(!isControl) return;
+    if(!isPresenterMode) return;
     if(notesPanel) notesPanel.classList.add('visible');
+    if(!isServerControl){
+      try{
+        var embedded=document.getElementById('speaker-notes-data');
+        speakerNotes=embedded && embedded.textContent ? JSON.parse(embedded.textContent) : {};
+        notesLoadState='ready';
+      }catch(err){
+        console.error('Embedded speaker notes parse failed:',err);
+        speakerNotes={};
+        notesLoadState='error';
+      }
+      updateSpeakerNotes();
+      return;
+    }
     fetch('/api/speaker-notes?token='+encodeURIComponent(token),{cache:'no-cache'}).then(function(res){
       if(!res.ok) throw new Error('HTTP '+res.status);
       return res.json();
@@ -1084,7 +1135,7 @@ body.audience-mode .slide{
   }
 
   function broadcastPage(n){
-    if(!isControl) return;
+    if(!isServerControl) return;
     if(!token){
       setSyncStatus('控制端：缺少密钥');
       return;
@@ -1228,11 +1279,14 @@ body.audience-mode .slide{
 
   if(isExportMode){
     setSyncStatus('导出');
-  }else if(isControl){
+  }else if(isServerControl){
     setSyncStatus(token?'控制端：待同步':'控制端：缺少密钥');
     loadSpeakerNotes();
   }else if(isAudience){
     connectAudience();
+  }else if(isPresenterMode){
+    setSyncStatus('本地演讲者');
+    loadSpeakerNotes();
   }else{
     setSyncStatus('单机');
   }
@@ -1250,7 +1304,7 @@ body.audience-mode .slide{
   var EXPORT_H = 720;
   var PPT_W = 13.333333;
   var PPT_H = 7.5;
-  var EXPORT_SCALE = 2.5; // 3200×1800 screenshots: clear text/figures without huge files.
+  var EXPORT_SCALE = 3; // 3840×2160 screenshots.
   var btn = document.getElementById('btn-export-pptx');
   var status = document.getElementById('export-status');
   var choiceBackdrop = document.getElementById('export-choice-backdrop');
@@ -1387,7 +1441,11 @@ body.audience-mode .slide{
 
   function shouldUseServerExport(){
     var params = new URLSearchParams(window.location.search);
-    return (location.protocol==='http:' || location.protocol==='https:') && params.get('role')==='control';
+    return (location.protocol==='http:' || location.protocol==='https:') && params.get('role')==='control' && Boolean(params.get('token'));
+  }
+
+  function isServerExportMode(mode){
+    return mode === 'normal' || mode === 'advanced' || mode === 'editable';
   }
 
   function openExportChoice(){
@@ -1396,15 +1454,18 @@ body.audience-mode .slide{
     choiceBackdrop.classList.add('open');
     choiceBackdrop.setAttribute('aria-hidden','false');
     modeButtons.forEach(function(button){
-      if(button.dataset.exportMode === 'advanced' || button.dataset.exportMode === 'editable'){
+      if(isServerExportMode(button.dataset.exportMode)){
         button.disabled = !serverReady;
-        button.title = serverReady ? '使用服务端导出' : '该导出模式需要从控制端服务打开';
+        button.title = serverReady ? '使用服务端导出' : '该导出模式需要从带 token 的控制端服务打开';
+      }else{
+        button.disabled = false;
+        button.title = '不调用服务，直接在浏览器中导出';
       }
     });
     if(choiceFoot){
       choiceFoot.textContent = serverReady
-        ? '当前为控制端：三种导出都会由服务端生成并下载。'
-        : '当前为本地文件或非控制端：可用普通导出；高级和可编辑文字导出需要启动控制端服务。';
+        ? '当前为控制端：前三种服务端导出由本地服务生成；纯前端导出仍可不调用服务。'
+        : '当前为本地文件或非控制端：仅纯前端导出可用；服务端普通、高级和可编辑文字导出需要启动带 token 的控制端服务。';
     }
   }
 
@@ -1419,11 +1480,11 @@ body.audience-mode .slide{
     if(btn.disabled) return;
     btn.disabled = true;
     var oldText = btn.textContent;
-    btn.textContent = mode === 'editable' ? '可编辑导出中' : mode === 'advanced' ? '高级导出中' : '导出中';
+    btn.textContent = mode === 'client' ? '前端导出中' : mode === 'editable' ? '可编辑导出中' : mode === 'advanced' ? '高级导出中' : '导出中';
     try{
-      if(shouldUseServerExport()) await exportToPPTXFromServer(mode);
-      else if(mode === 'advanced' || mode === 'editable') throw new Error('该导出模式需要通过控制端服务运行');
-      else await exportToPPTX();
+      if(mode === 'client') await exportToPPTX();
+      else if(isServerExportMode(mode) && shouldUseServerExport()) await exportToPPTXFromServer(mode);
+      else throw new Error('该导出模式需要通过带 token 的控制端服务运行');
     }catch(err){
       console.error(err);
       setStatus('导出失败');

@@ -23,8 +23,8 @@ const ROOT = __dirname;
 const HTML_FILE = path.join(ROOT, '模板.html');
 const OUT_FILE = path.join(ROOT, 'presentation_components.pptx');
 const EDITABLE_OUT_FILE = path.join(ROOT, 'presentation_editable_text.pptx');
-const EXPORT_W = 1280;
-const EXPORT_H = 720;
+const EXPORT_W = Number(process.env.COMPONENT_EXPORT_W || process.env.EXPORT_W || 1280);
+const EXPORT_H = Number(process.env.COMPONENT_EXPORT_H || process.env.EXPORT_H || 720);
 const DEVICE_SCALE = Number(process.env.COMPONENT_EXPORT_SCALE || process.env.EXPORT_SCALE || 3);
 const PORT = Number(process.env.COMPONENT_EXPORT_PORT || 3189);
 const CHROME_DEBUG_PORT = Number(process.env.CHROME_DEBUG_PORT || 9224);
@@ -217,12 +217,12 @@ async function getSlideComponents(cdp, sessionId, url) {
     expression: `new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)))`,
     awaitPromise: true
   }, sessionId);
-  // Force slide to exact 1280x720 at (0,0) for reliable screenshot coordinates
+  // Force slide to the export canvas at (0,0) for reliable screenshot coordinates.
   await cdp.send("Runtime.evaluate", {
     expression: `(()=>{
       var s = document.querySelector(".slide.active") || document.querySelector(".slide");
       if(s) s.setAttribute("style","position:fixed!important;left:0!important;top:0!important;"+
-        "width:1280px!important;height:720px!important;margin:0!important;"+
+        "width:${EXPORT_W}px!important;height:${EXPORT_H}px!important;margin:0!important;"+
         "max-width:none!important;max-height:none!important;transform:none!important;");
     })()`,
     awaitPromise: true
@@ -368,7 +368,8 @@ async function getSlideComponents(cdp, sessionId, url) {
             textAlign: cs.textAlign || "left",
             verticalAlign: cs.verticalAlign || "top",
             lineHeight: cs.lineHeight === "normal" ? 0 : cssNumber(cs.lineHeight),
-            singleLine: text.indexOf("\\n") < 0,
+            whiteSpace: cs.whiteSpace || "normal",
+            singleLine: cs.whiteSpace === "nowrap" || cs.whiteSpace === "pre",
             padding: {
               top: cssNumber(cs.paddingTop),
               right: cssNumber(cs.paddingRight),
@@ -937,7 +938,7 @@ function buildSlideXml(slideIndex, comps, options = {}) {
     }).join('');
     return `<p:sp><p:nvSpPr><p:cNvPr id="${id}" name="${xmlEscape(name)}"/><p:cNvSpPr txBox="1"/><p:nvPr/></p:nvSpPr>
 <p:spPr><a:xfrm><a:off x="${xEmu}" y="${yEmu}"/><a:ext cx="${wEmu}" cy="${hEmu}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/><a:ln><a:noFill/></a:ln></p:spPr>
-<p:txBody><a:bodyPr wrap="${wrap}" lIns="${lIns}" tIns="${tIns}" rIns="${rIns}" bIns="${bIns}" anchor="t"><a:noAutofit/></a:bodyPr><a:lstStyle/>${parasXml}</p:txBody></p:sp>`;
+<p:txBody><a:bodyPr wrap="${wrap}" lIns="${lIns}" tIns="${tIns}" rIns="${rIns}" bIns="${bIns}" anchor="t"><a:normAutofit fontScale="100000" lnSpcReduction="0"/></a:bodyPr><a:lstStyle/>${parasXml}</p:txBody></p:sp>`;
   }
 
   let imagesXml = '';
