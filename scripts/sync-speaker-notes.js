@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const HTML_FILE = path.join(ROOT, '模板.html');
+const HTML_FILE = path.join(ROOT, 'template.html');
 const NOTES_FILE = path.join(ROOT, 'speaker-notes.json');
 const CHECK_ONLY = process.argv.includes('--check');
 
@@ -17,7 +17,7 @@ function normalizeJson(value) {
 
 function extractEmbeddedNotes(html) {
   const match = html.match(/<script\s+id="speaker-notes-data"\s+type="application\/json">([\s\S]*?)<\/script>/);
-  if (!match) throw new Error('Could not find <script id="speaker-notes-data" type="application/json"> in 模板.html');
+  if (!match) throw new Error('Could not find <script id="speaker-notes-data" type="application/json"> in template.html');
   return {
     fullMatch: match[0],
     jsonText: match[1]
@@ -48,7 +48,7 @@ function main() {
   }
 
   fs.writeFileSync(HTML_FILE, html.replace(embedded.fullMatch, nextScript));
-  console.log('synced speaker-notes.json into 模板.html');
+  console.log('synced speaker-notes.json into template.html');
 }
 
 try {

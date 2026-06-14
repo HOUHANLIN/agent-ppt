@@ -4,7 +4,13 @@ const path = require('path');
 const { spawnSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const HTML_FILE = path.join(ROOT, '模板.html');
+const HTML_FILE = path.join(ROOT, 'template.html');
+const ASSET_SCRIPTS = [
+  'assets/presenter.js',
+  'assets/frontend-export.js',
+  'assets/canvas-scaler.js',
+  'assets/image-tools.js'
+];
 
 function fail(message) {
   throw new Error(message);
@@ -47,6 +53,9 @@ function checkNodeSyntax() {
   run(process.execPath, ['--check', 'export-components.js']);
   run(process.execPath, ['--check', 'server.js']);
   run(process.execPath, ['--check', 'scripts/sync-speaker-notes.js']);
+  for (const file of ASSET_SCRIPTS) {
+    run(process.execPath, ['--check', file]);
+  }
   console.log('node syntax ok');
 }
 
@@ -59,7 +68,7 @@ function checkMarkdownFences() {
 }
 
 function checkHtmlScripts(html) {
-  const scripts = [...html.matchAll(/<script(?![^>]*type=["']application\/json["'])[^>]*>([\s\S]*?)<\/script>/gi)];
+  const scripts = [...html.matchAll(/<script(?![^>]*type=["']application\/json["'])(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)];
   scripts.forEach((match, index) => {
     try {
       new Function(match[1]);
@@ -68,6 +77,18 @@ function checkHtmlScripts(html) {
     }
   });
   console.log(`html scripts ok (${scripts.length})`);
+}
+
+function checkTemplateAssets(html) {
+  if (!html.includes('<link rel="stylesheet" href="assets/template.css"/>')) {
+    fail('template stylesheet reference is missing');
+  }
+  for (const file of ASSET_SCRIPTS) {
+    if (!html.includes(`<script src="${file}"></script>`)) {
+      fail(`${file} script reference is missing`);
+    }
+  }
+  console.log('template assets ok');
 }
 
 function checkSpeakerNotes(html) {
@@ -129,10 +150,10 @@ function checkExplicitExportMarkers(html) {
 function checkExportDefaults() {
   const fullSlide = read('export-pptx.js');
   const components = read('export-components.js');
-  const html = read('模板.html');
+  const frontendExport = read('assets/frontend-export.js');
   if (!fullSlide.includes('process.env.EXPORT_SCALE || 3')) fail('export-pptx.js default scale is not 3');
   if (!components.includes("process.env.EXPORT_SCALE || 3")) fail('export-components.js default scale is not 3');
-  if (!html.includes('var EXPORT_SCALE = 3;')) fail('frontend export default scale is not 3');
+  if (!frontendExport.includes('var EXPORT_SCALE = 3;')) fail('frontend export default scale is not 3');
   if (!components.includes('<a:normAutofit fontScale="100000" lnSpcReduction="0"/>')) {
     fail('editable text export does not use wrapping-friendly autofit');
   }
@@ -144,6 +165,7 @@ function main() {
   checkPackageJson();
   checkNodeSyntax();
   checkMarkdownFences();
+  checkTemplateAssets(html);
   checkHtmlScripts(html);
   checkSpeakerNotes(html);
   checkSlides(html);

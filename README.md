@@ -1,18 +1,18 @@
 # HTML PPT 模板说明
 
-这个项目用单个 `模板.html` 制作 16:9 固定画布幻灯片，并提供本地演讲、控制端同步、观众端观看和 PPTX 导出能力。
+这个项目用 `template.html` 制作 16:9 固定画布幻灯片，并通过 `assets/` 中的样式与浏览器脚本提供本地演讲、控制端同步、观众端观看和 PPTX 导出能力。
 
 ## 使用方式
 
-- 直接打开 `模板.html`：本地演讲者模式。可以翻页、全屏、查看演讲者注释，并使用纯前端 PPTX 导出。
+- 直接打开 `template.html`：本地演讲者模式。可以翻页、全屏、查看演讲者注释，并使用纯前端 PPTX 导出。
 - 启动 `server.js`：控制端和观众端同步翻页。控制端可以查看演讲者注释，并使用纯前端或服务端 PPTX 导出。
 - 运行导出脚本：命令行生成 PPTX，脚本会临时启动本地服务并调用系统 Chrome Headless 渲染。
 
 ## 本地演讲者模式
 
-直接双击或用浏览器打开 `模板.html` 即可进入本地演讲者模式。页面会显示底部演讲者注释抽屉，排版与服务控制端一致：幻灯片区域会为注释抽屉预留空间，而不是被注释遮挡。
+直接双击或用浏览器打开 `template.html` 即可进入本地演讲者模式。页面会显示底部演讲者注释抽屉，排版与服务控制端一致：幻灯片区域会为注释抽屉预留空间，而不是被注释遮挡。直接分发本地版本时，需要保留 `assets/` 和 `lib/` 目录的相对位置。
 
-本地文件模式不会读取外置 `speaker-notes.json`，因为浏览器通常会限制 `file://` 页面读取同目录 JSON。它读取 `模板.html` 内的 `<script id="speaker-notes-data" type="application/json">` 作为内嵌注释数据。
+本地文件模式不会读取外置 `speaker-notes.json`，因为浏览器通常会限制 `file://` 页面读取同目录 JSON。它读取 `template.html` 内的 `<script id="speaker-notes-data" type="application/json">` 作为内嵌注释数据。
 
 ## 启动同步服务
 
@@ -44,7 +44,7 @@ http://localhost:3000/?role=audience
 
 ## 演讲者注释
 
-服务控制端读取同目录下的 `speaker-notes.json`。本地演讲者模式读取 `模板.html` 里的 `speaker-notes-data`。两份数据都使用 1-based 页码字符串作为键：
+服务控制端读取同目录下的 `speaker-notes.json`。本地演讲者模式读取 `template.html` 里的 `speaker-notes-data`。两份数据都使用 1-based 页码字符串作为键：
 
 ```json
 {
@@ -65,7 +65,7 @@ http://localhost:3000/?role=audience
 npm run sync-notes
 ```
 
-这个命令会把 `speaker-notes.json` 自动写入 `模板.html` 内的 `speaker-notes-data`。
+这个命令会把 `speaker-notes.json` 自动写入 `template.html` 内的 `speaker-notes-data`。
 
 缺失的页码会显示“本页暂无演讲者注释”。
 
@@ -146,7 +146,11 @@ npm run export:editable
 
 ## 文件说明
 
-- `模板.html`：幻灯片内容、样式、演讲者模式、同步客户端和前端导出逻辑。
+- `template.html`：幻灯片内容、演讲者注释内嵌 JSON、演讲者模式和导出弹窗 DOM。
+- `assets/template.css`：模板样式、固定画布缩放样式、图片组件样式和演讲者注释布局。
+- `assets/presenter.js`：本地演讲者模式、控制端同步、观众端同步、缩略图和演讲者注释运行时。
+- `assets/frontend-export.js`：纯前端导出和服务端导出弹窗逻辑。
+- `assets/canvas-scaler.js`、`assets/image-tools.js`：固定画布缩放和图片比例自动适配辅助脚本。
 - `speaker-notes.json`：服务控制端读取的演讲者注释。
 - `server.js`：同步翻页、受保护注释接口和服务端导出接口。
 - `export-pptx.js`：服务端普通整页 PPTX 导出。
@@ -160,7 +164,8 @@ npm run export:editable
 - 页面总数、`.page-num`、目录和缩略图标题一致。
 - 已运行 `npm run sync-notes`，并确认 `speaker-notes.json` 与 HTML 内嵌 `speaker-notes-data` 同步。
 - `npm test` 通过。
-- 本地打开 `模板.html` 时能看到演讲者注释。
+- 本地打开 `template.html` 时能看到演讲者注释。
+- `template.html` 对 `assets/` 和 `lib/` 的相对引用仍然有效。
 - 控制端和观众端仍能分别打开。
 - 导出弹窗仍显示四种模式，且非控制端只启用纯前端导出。
 - 新增组件已写 `data-export-component`，减少组件导出时的自动猜测。

@@ -20,7 +20,7 @@ const { spawn } = require('child_process');
 
 // ── Configuration ────────────────────────────────────────────────
 const ROOT = __dirname;
-const HTML_FILE = path.join(ROOT, '模板.html');
+const HTML_FILE = path.join(ROOT, 'template.html');
 const OUT_FILE = path.join(ROOT, 'presentation_components.pptx');
 const EDITABLE_OUT_FILE = path.join(ROOT, 'presentation_editable_text.pptx');
 const EXPORT_W = Number(process.env.COMPONENT_EXPORT_W || process.env.EXPORT_W || 1280);
@@ -1057,7 +1057,7 @@ function buildPptx(slides, outFile, options = {}) {
 
 async function exportComponents(options = {}) {
   const total = countSlides();
-  if (!total) throw new Error('No slides found in 模板.html');
+  if (!total) throw new Error('No slides found in template.html');
 
   const exportMode = options.mode || process.env.COMPONENT_EXPORT_MODE || 'advanced';
   const editableText = exportMode === 'editable';

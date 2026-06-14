@@ -1,6 +1,8 @@
 # Template Syntax Reference
 
-Read this when creating or revising slides in `模板.html`.
+Read this when creating or revising slides in `template.html`.
+
+`template.html` keeps slide content and DOM structure. Shared styles and browser runtime live in `assets/`, so template behavior changes should be made there instead of adding new inline `<style>` or executable `<script>` blocks.
 
 ## Core Structure
 
@@ -26,14 +28,14 @@ Keep:
 - `.body` as the main content container.
 - `.layout-note` as template guidance unless producing a clean final deck.
 
-Do not remove or rewrite the navigation, presenter-notes, sync, export, or scaler scripts while only creating slide content.
+Do not remove or rewrite the navigation, presenter-notes, sync, export, or scaler script references while only creating slide content.
 
 ## Speaker Notes
 
 Speaker notes are stored in two places:
 
 - `speaker-notes.json`: used by the token-protected service control page.
-- `<script id="speaker-notes-data" type="application/json">` in `模板.html`: used when `模板.html` is opened directly through `file://` or as a non-control local page.
+- `<script id="speaker-notes-data" type="application/json">` in `template.html`: used when `template.html` is opened directly through `file://` or as a non-control local page.
 
 When changing slide count or order, keep both stores in sync and use 1-based string keys:
 

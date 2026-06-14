@@ -1,6 +1,6 @@
 ---
 name: agent-ppt
-description: Create or revise slide decks using this project's HTML PPT template. Use when Codex needs to turn a user outline, source content, paper notes, lesson plan, report, speech draft, or topic into `模板.html` slides; choose template layouts, write slide HTML, maintain speaker notes in both `speaker-notes.json` and the HTML embedded `speaker-notes-data`, and perform visual QA for overlap, overflow, image sizing, presenter-note layout, and PPTX export compatibility.
+description: Create or revise slide decks using this project's HTML PPT template. Use when Codex needs to turn a user outline, source content, paper notes, lesson plan, report, speech draft, or topic into `template.html` slides; choose template layouts, write slide HTML, maintain speaker notes in both `speaker-notes.json` and the HTML embedded `speaker-notes-data`, and perform visual QA for overlap, overflow, image sizing, presenter-note layout, and PPTX export compatibility.
 ---
 
 # Agent PPT
@@ -10,7 +10,7 @@ Use this skill to build content decks inside this project by editing the existin
 ## Start Here
 
 1. Read the user's source content and infer the presentation goal, audience, desired length, section structure, and tone.
-2. Inspect `模板.html` before editing. Reuse its existing slide sections, CSS classes, controls, notes, sync, and export scripts.
+2. Inspect `template.html` before editing, and inspect `assets/` before changing template behavior. Reuse the existing slide sections, CSS classes, controls, notes, sync, and export scripts.
 3. Read `references/template-syntax.md` when choosing layouts, writing slide HTML, adding images, or doing visual QA.
 4. Create a slide plan before editing: each slide gets one purpose, a chosen layout, a short title, and speaker-note intent.
 5. Edit only the slide content and `speaker-notes.json` unless the user explicitly asks for template behavior changes; run `npm run sync-notes` to update the HTML embedded `speaker-notes-data`.
@@ -49,7 +49,7 @@ Use the template's existing layouts instead of inventing new structures:
 
 ### 3. Write HTML in the template style
 
-- Preserve `.slide-area`, navigation controls, presenter notes drawer, sync scripts, scaler scripts, and export scripts.
+- Preserve `.slide-area`, navigation controls, presenter notes drawer, asset script references, scaler scripts, and export scripts.
 - Each page must be a `<section class="slide ...">` with `data-title`, `data-section`, `.page-num`, and appropriate inner template structure.
 - Keep `.layout-note` for template guidance unless the user asks for a clean audience deck without layout notes.
 - Update every `.page-num` and the visible total after adding/removing slides.
@@ -58,7 +58,7 @@ Use the template's existing layouts instead of inventing new structures:
 ### 4. Maintain speaker notes
 
 - Update `speaker-notes.json` after slide changes.
-- Run `npm run sync-notes` after editing notes; local `file://` presentation mode reads the generated embedded copy in `模板.html`.
+- Run `npm run sync-notes` after editing notes; local `file://` presentation mode reads the generated embedded copy in `template.html`.
 - Use 1-based string keys: `"1"`, `"2"`, `"3"`.
 - Notes should tell the speaker what to say, not repeat slide text verbatim.
 - If a slide is a figure, note the intended reading order.
@@ -102,7 +102,7 @@ Before reporting completion:
 - Confirm slide count and page numbers match.
 - Run `npm run sync-notes`, then confirm `npm test` passes.
 - Confirm `speaker-notes.json` keys cover the final slide count or intentionally omit only slides with no notes.
-- Confirm control/audience/export scripts were not accidentally removed.
-- Confirm the deck opens directly as `模板.html` for local presenter mode and through `server.js` for control/audience mode when notes or export behavior matters.
+- Confirm the `assets/` references for control/audience/export behavior were not accidentally removed.
+- Confirm the deck opens directly as `template.html` for local presenter mode and through `server.js` for control/audience mode when notes or export behavior matters.
 - Confirm the export chooser still exposes four modes and correctly disables server modes outside the tokenized control page.
 - Mention any visual QA that could not be performed.

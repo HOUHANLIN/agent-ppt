@@ -98,7 +98,7 @@ function broadcastPage() {
 
 function serveStatic(req, res, parsedUrl) {
   let pathname = decodeURIComponent(parsedUrl.pathname);
-  if (pathname === '/') pathname = '/模板.html';
+  if (pathname === '/') pathname = '/template.html';
 
   const filePath = path.normalize(path.join(rootDir, pathname));
   if (!filePath.startsWith(rootDir + path.sep) && filePath !== rootDir) {

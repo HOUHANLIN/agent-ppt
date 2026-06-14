@@ -6,7 +6,7 @@ const path = require('path');
 const { spawn } = require('child_process');
 
 const ROOT = __dirname;
-const HTML_FILE = path.join(ROOT, '模板.html');
+const HTML_FILE = path.join(ROOT, 'template.html');
 const OUT_FILE = path.join(ROOT, 'presentation_exported_script.pptx');
 const EXPORT_W = Number(process.env.EXPORT_W || 1280);
 const EXPORT_H = Number(process.env.EXPORT_H || 720);
@@ -440,7 +440,7 @@ async function buildPptxWithBrowserPptxGen(cdp, sessionId, imageFiles, outFile) 
 
 async function exportPresentation(options = {}) {
   const total = countSlides();
-  if (!total) throw new Error('No slides found in 模板.html');
+  if (!total) throw new Error('No slides found in template.html');
   const chrome = findChrome();
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'html-ppt-export-'));
   const imageFiles = [];
