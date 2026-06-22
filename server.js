@@ -206,6 +206,7 @@ const server = http.createServer(async (req, res) => {
 
     const requestedMode = body && body.mode;
     const mode = requestedMode === 'advanced' || requestedMode === 'editable' ? requestedMode : 'normal';
+    const includeSpeakerNotes = Boolean(body && body.includeSpeakerNotes);
     const exporter = mode === 'normal' ? exportPresentation : exportComponents;
     const downloadName = mode === 'editable'
       ? 'presentation_editable_text.pptx'
@@ -218,6 +219,7 @@ const server = http.createServer(async (req, res) => {
     try {
       await exporter({
         mode,
+        includeSpeakerNotes,
         baseUrl: `http://127.0.0.1:${port}`,
         outFile,
         onProgress(info) {

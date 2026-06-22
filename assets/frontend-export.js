@@ -9,6 +9,7 @@
   var choiceBackdrop = document.getElementById('export-choice-backdrop');
   var choiceClose = document.getElementById('export-choice-close');
   var choiceFoot = document.getElementById('export-choice-foot');
+  var includeSpeakerNotesInput = document.getElementById('export-include-speaker-notes');
   var modeButtons = choiceBackdrop ? Array.prototype.slice.call(choiceBackdrop.querySelectorAll('[data-export-mode]')) : [];
 
   function setStatus(text){ if(status) status.textContent = text || ''; }
@@ -111,11 +112,12 @@
     var token = params.get('token') || '';
     if(!token) throw new Error('控制端缺少 token，无法使用服务端导出');
     var exportMode = mode === 'advanced' || mode === 'editable' ? mode : 'normal';
-    setStatus(exportMode === 'editable' ? '可编辑文字导出中…' : exportMode === 'advanced' ? '高级导出中…' : '普通导出中…');
+    var includeSpeakerNotes = Boolean(includeSpeakerNotesInput && includeSpeakerNotesInput.checked);
+    setStatus((exportMode === 'editable' ? '可编辑文字导出中…' : exportMode === 'advanced' ? '高级导出中…' : '普通导出中…') + (includeSpeakerNotes ? ' 含演讲稿' : ''));
     var res = await fetch('/api/export-pptx',{
       method:'POST',
       headers:{'Content-Type':'application/json','X-Control-Token':token},
-      body:JSON.stringify({token:token,mode:exportMode})
+      body:JSON.stringify({token:token,mode:exportMode,includeSpeakerNotes:includeSpeakerNotes})
     });
     if(!res.ok){
       var msg='服务端导出失败';
@@ -163,8 +165,8 @@
     });
     if(choiceFoot){
       choiceFoot.textContent = serverReady
-        ? '当前为控制端：前三种服务端导出由本地服务生成；纯前端导出仍可不调用服务。'
-        : '当前为本地文件或非控制端：仅纯前端导出可用；服务端普通、高级和可编辑文字导出需要启动带 token 的控制端服务。';
+        ? '当前为控制端：前三种服务端导出由本地服务生成；勾选后会把 speaker-notes.json 写入 PPT 备注页。纯前端导出仍不包含演讲稿。'
+        : '当前为本地文件或非控制端：仅纯前端导出可用，且不包含演讲稿；服务端普通、高级和可编辑文字导出需要启动带 token 的控制端服务。';
     }
   }
 

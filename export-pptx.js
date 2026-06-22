@@ -7,6 +7,7 @@ const { spawn } = require('child_process');
 
 const ROOT = __dirname;
 const HTML_FILE = path.join(ROOT, 'template.html');
+const NOTES_FILE = path.join(ROOT, 'speaker-notes.json');
 const OUT_FILE = path.join(ROOT, 'presentation_exported_script.pptx');
 const EXPORT_W = Number(process.env.EXPORT_W || 1280);
 const EXPORT_H = Number(process.env.EXPORT_H || 720);
@@ -294,6 +295,18 @@ function xmlEscape(value) {
   return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+function readSpeakerNotes() {
+  try {
+    const parsed = JSON.parse(fs.readFileSync(NOTES_FILE, 'utf8'));
+    if (!parsed || Array.isArray(parsed) || typeof parsed !== 'object') {
+      throw new Error('speaker-notes.json must contain an object keyed by slide number');
+    }
+    return parsed;
+  } catch (err) {
+    throw new Error(`Failed to read speaker-notes.json: ${err.message}`);
+  }
+}
+
 function contentTypes(slideCount) {
   const slides = Array.from({ length: slideCount }, (_, i) => `<Override PartName="/ppt/slides/slide${i + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slide+xml"/>`).join('');
   const images = Array.from({ length: slideCount }, (_, i) => `<Override PartName="/ppt/media/image${i + 1}.png" ContentType="image/png"/>`).join('');
@@ -370,9 +383,13 @@ function buildPptx(imageFiles, outFile) {
   fs.writeFileSync(outFile, createZip(entries));
 }
 
-async function buildPptxWithBrowserPptxGen(cdp, sessionId, imageFiles, outFile) {
+async function buildPptxWithBrowserPptxGen(cdp, sessionId, imageFiles, outFile, speakerNotes = {}) {
   await cdp.send('Runtime.evaluate', {
     expression: `window.__exportImages = [];`,
+    awaitPromise: true
+  }, sessionId);
+  await cdp.send('Runtime.evaluate', {
+    expression: `window.__exportSpeakerNotes = ${JSON.stringify(speakerNotes)};`,
     awaitPromise: true
   }, sessionId);
 
@@ -413,10 +430,16 @@ async function buildPptxWithBrowserPptxGen(cdp, sessionId, imageFiles, outFile) 
         pptx.title = document.title || 'HTML PPT Export';
         pptx.company = '';
         pptx.lang = 'zh-CN';
-        for (const img of window.__exportImages) {
+        for (let i = 0; i < window.__exportImages.length; i++) {
+          const img = window.__exportImages[i];
+          const slideNumber = i + 1;
           const slide = pptx.addSlide();
           slide.background = { color: 'FFFFFF' };
           slide.addImage({ data: img, x: 0, y: 0, w: ${PPT_W}, h: ${PPT_H} });
+          const note = window.__exportSpeakerNotes && window.__exportSpeakerNotes[String(slideNumber)];
+          if (typeof note === 'string' && note.trim() && typeof slide.addNotes === 'function') {
+            slide.addNotes(note);
+          }
         }
         let data;
         try {
@@ -441,6 +464,8 @@ async function buildPptxWithBrowserPptxGen(cdp, sessionId, imageFiles, outFile) 
 async function exportPresentation(options = {}) {
   const total = countSlides();
   if (!total) throw new Error('No slides found in template.html');
+  const includeSpeakerNotes = Boolean(options.includeSpeakerNotes || process.env.INCLUDE_SPEAKER_NOTES === '1');
+  const speakerNotes = includeSpeakerNotes ? readSpeakerNotes() : {};
   const chrome = findChrome();
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'html-ppt-export-'));
   const imageFiles = [];
@@ -481,7 +506,7 @@ async function exportPresentation(options = {}) {
     }
     if (options.onProgress) options.onProgress({ phase: 'write', total });
     else process.stdout.write('\nWriting PPTX...\n');
-    await buildPptxWithBrowserPptxGen(cdp, sessionId, imageFiles, outFile);
+    await buildPptxWithBrowserPptxGen(cdp, sessionId, imageFiles, outFile, speakerNotes);
     if (options.onProgress) options.onProgress({ phase: 'done', total, outFile });
     else console.log(`Done: ${outFile}`);
     return { outFile, slideCount: total };

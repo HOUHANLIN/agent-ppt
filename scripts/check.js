@@ -133,6 +133,8 @@ function checkExportUi(html) {
   if (!html.includes('服务端普通')) fail('server normal export label missing');
   if (!html.includes('服务端高级')) fail('server advanced export label missing');
   if (!html.includes('服务端可编辑文字')) fail('server editable export label missing');
+  if (!html.includes('服务端导出时同步演讲稿')) fail('server speaker notes export option missing');
+  if (!html.includes('纯前端导出不包含演讲稿')) fail('pure frontend speaker notes limitation text missing');
   console.log('export ui ok');
 }
 

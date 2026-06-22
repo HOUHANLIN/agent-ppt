@@ -100,6 +100,8 @@ npm run export:editable
 
 非控制端或本地文件模式下，只有“纯前端导出”可用。三种服务端导出需要从带 `token` 的控制端页面打开。
 
+导出弹窗中的“服务端导出时同步演讲稿”只对三种服务端导出有效。勾选后，服务端会读取 `speaker-notes.json`，并把每页非空演讲者注释写入 PPTX 的备注页。纯前端导出始终只导出幻灯片画面，不包含演讲稿。
+
 默认截图为 4K：固定 1280 x 720 HTML 画布乘以 `EXPORT_SCALE=3`，得到 3840 x 2160 输出。
 
 组件框导出优先读取 HTML 上的显式标记：
@@ -141,6 +143,7 @@ npm run export:editable
 - `COMPONENT_EXPORT_W` / `COMPONENT_EXPORT_H`：组件导出窗口尺寸，默认继承 `EXPORT_W` / `EXPORT_H`。
 - `CHROME_BIN`：自定义 Chrome/Chromium 可执行文件路径。
 - `EXPORT_PORT` / `COMPONENT_EXPORT_PORT`：导出脚本临时服务端口。
+- `INCLUDE_SPEAKER_NOTES=1`：命令行服务端导出时把 `speaker-notes.json` 写入 PPTX 备注页，默认关闭。
 
 导出脚本不安装依赖。它们会查找本机已有 Chrome 或 Chromium，并临时启动本项目的本地服务。
 
@@ -168,5 +171,6 @@ npm run export:editable
 - `template.html` 对 `assets/` 和 `lib/` 的相对引用仍然有效。
 - 控制端和观众端仍能分别打开。
 - 导出弹窗仍显示四种模式，且非控制端只启用纯前端导出。
+- 如需同步演讲稿，确认只在服务端导出中勾选“服务端导出时同步演讲稿”，并检查 PPTX 备注页内容。
 - 新增组件已写 `data-export-component`，减少组件导出时的自动猜测。
 - 服务端普通、服务端高级和服务端可编辑文字导出仍能生成 PPTX。

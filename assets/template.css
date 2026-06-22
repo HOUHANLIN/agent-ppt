@@ -167,6 +167,9 @@ body:fullscreen .speaker-notes,body:-webkit-full-screen .speaker-notes{left:0}
 .export-mode-name{margin-top:12px;font-size:18px;font-weight:900;color:#172039}
 .export-mode-desc{margin-top:7px;font-size:12px;line-height:1.5;color:rgba(27,34,56,.7)}
 .export-mode-meta{position:absolute;right:12px;bottom:10px;font-size:11px;font-weight:800;color:rgba(27,34,56,.42)}
+.export-notes-option{display:grid;grid-template-columns:auto 1fr;column-gap:8px;row-gap:2px;align-items:start;margin-top:12px;padding:10px 12px;border:1px solid rgba(27,34,56,.14);background:rgba(202,170,152,.12);font-size:13px;font-weight:800;color:#172039;cursor:pointer}
+.export-notes-option input{margin-top:2px;accent-color:#5b473d}
+.export-notes-option small{grid-column:2;color:rgba(27,34,56,.58);font-size:11px;line-height:1.4;font-weight:600}
 .export-choice-foot{margin-top:12px;font-size:11px;color:rgba(27,34,56,.56)}
 @media (max-width:720px){
   .export-choice{padding:14px}
